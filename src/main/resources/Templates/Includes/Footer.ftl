@@ -8,13 +8,13 @@
         </div>
     </div>
 </div>
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery.easing.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.mixitup.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/slick.min.js"></script>
-<script type="text/javascript" src="js/custom.js"></script>
-
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.easing.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="jquery.mixitup.js" type="text/javascript"></script>
+<script type="text/javascript" src="/js/slick.min.js"></script>
+<script type="text/javascript" src="/js/custom.js"></script>
+<script src="/js/masked-input/jquery.maskedinput.js" type="text/javascript"></script>
 
 </body>
 </html>

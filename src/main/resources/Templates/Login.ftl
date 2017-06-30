@@ -20,14 +20,14 @@
 <a href="/Inicio" class="home-login">Inicio</a>
 <div class="col-md-4 col-md-offset-4 login-form">
     <h2 class="login-headers">Iniciar Sesion</h2>
-    <form method='post' action='/loginForm' style="padding-bottom:20px">
+    <form method='post' action='/LoginForm' style="padding-bottom:20px">
         <div class="form-group">
             <label class="login-headers">Usuario</label>
-            <input type="text" name="Usuario" class="form-control">
+            <input type="text" name="usuario" class="form-control">
         </div>
         <div class="form-group">
             <label class="login-headers">Contraseña</label>
-            <input type="password"  name="password" class="form-control">
+            <input type="password"  name="clave" class="form-control">
         </div>
         <div class="form-group">
             <input type="submit" id="btnSubmit" class="form-control" value="Iniciar Sesion">
