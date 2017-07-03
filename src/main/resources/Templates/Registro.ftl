@@ -4,8 +4,8 @@
 <div class="panel">
     <div class="panel-heading  panel-lottery">Registro de Usuarios</div>
     <div class="panel-body">
-        <form id="form">
-            <div class="form-group" >
+        <form action="/CrearUsuario" method="post" id="form">
+            <div class="form-group">
                 <label>Nombre Completo:</label>
                 <input type="text" id="field" class="form-control" name="nombre"/>
             </div>
@@ -20,16 +20,15 @@
             </div>
             <div class="form-group">
                 <label>Fecha de Nacimiento:</label>
-                <input type="date" id="date" class="form-control" name="fecha"/>
+                <input type="date" id="date" class="form-control" name="fechanac"/>
             </div>
             <div class="form-group">
                 <label>Cedula:</label>
                 <input type="text" id="cedula" class="form-control" name="cedula"/>
             </div>
 
-
             <div class="form-group">
-                <input type="submit" id="btnSubmit" class="form-control" value="Crear">
+                <input type="submit" id="btnSubmit" class="form-control" onclick="myFunction()" value="Crear">
             </div>
 
 
