@@ -47,7 +47,28 @@ public class main {
         get("/Fondos", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes,"ControldeFondos.ftl");
+            return new ModelAndView(attributes,"agregarFondos.ftl");
+
+        }, freeMarkerEngine);
+
+        get("/transferirFondos", (request, response) -> {
+
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes,"transferirFondos.ftl");
+
+        }, freeMarkerEngine);
+
+        get("/Transacciones", (request, response) -> {
+
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes,"transacciones.ftl");
+
+        }, freeMarkerEngine);
+
+        get("/Pale", (request, response) -> {
+
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes,"pale.ftl");
 
         }, freeMarkerEngine);
 

@@ -99,7 +99,7 @@ Header
     color: #ffffff;
     -webkit-filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
     -moz-filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
-    -ms-filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+    -ms-filter:  drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
     filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
     padding-top: 10px;
 }
@@ -615,6 +615,9 @@ p.cta-sub-title {
     height: 70px;
     padding-right: 15px;
 }
+
+#numeros>ul.loto-balls{margin:0px;padding:0px;margin:0px 5px 0px;}#numeros>ul.loto-balls>li{margin:0px;padding:0px;line-height:70px;display:inline;float:left;position:relative;width:105px;height:110px;background:url("../img/w-ball.png") no-repeat;}.loto-ball span{display:block;line-height:120px;text-align:center;font-family:impact;font-weight:bold;font-size:40px;color:#000;text-shadow:0 2px 5px #FFF;}.loto-ball-b span{display:block;line-height:120px;text-align:center;font-family:impact;font-weight:bold;font-size:40px;color:#ec1b23;text-shadow:0 2px 5px #FFF;}#numeros>ul.loto-balls>li.loto-ball-b{color:#ec1b23;}#dividendo{font-family:roboto;position:relative;left:10px;top:50px;font-size:14px;}#fecha{font-family:roboto;font-weight:bold;font-size:20px;color:#775c16;}
+
 /**************************************
 form element
 **************************************/
