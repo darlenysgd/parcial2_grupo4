@@ -8,6 +8,8 @@
         </div>
     </div>
 </div>
+</body>
+</html>
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.easing.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -24,5 +26,3 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/defaults-*.min.js"></script>
 
 
-</body>
-</html>
