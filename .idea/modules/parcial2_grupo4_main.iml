@@ -59,10 +59,5 @@
     <orderEntry type="library" name="Gradle: org.eclipse.jetty.websocket:websocket-api:9.3.6.v20151106" level="project" />
     <orderEntry type="library" name="Gradle: org.eclipse.jetty:jetty-util:9.3.6.v20151106" level="project" />
     <orderEntry type="library" name="Gradle: org.eclipse.jetty:jetty-security:9.3.6.v20151106" level="project" />
-    <orderEntry type="library" name="bootstrap-select" level="application" />
-    <orderEntry type="library" name="jquery.dataTables" level="application" />
-    <orderEntry type="library" name="jquery.maskedinput" level="application" />
-    <orderEntry type="library" name="jquery.form-validator" level="application" />
-    <orderEntry type="library" name="validator" level="application" />
   </component>
 </module>

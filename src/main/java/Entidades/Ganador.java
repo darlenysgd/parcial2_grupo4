@@ -15,7 +15,7 @@ public class Ganador implements Serializable {
     private long codigo;
     @OneToOne
     private Usuario usuario;
-
+    @Column(length = 1000000)
     private byte[] imagen;
 
     public Ganador() {

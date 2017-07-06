@@ -2,13 +2,26 @@ package Main; /**
  * Created by darle on 6/26/2017.
  */
 
-import Entidades.Usuario;
-import Servicios.BootStrapService;
-import Servicios.UsuarioServices;
+import Entidades.*;
+import Servicios.*;
 import freemarker.template.Configuration;
 import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
+import sun.misc.BASE64Decoder;
 
+import javax.imageio.ImageIO;
+import javax.management.monitor.GaugeMonitor;
+import javax.servlet.MultipartConfigElement;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +37,12 @@ public class main {
     private static int[] lotoGanadores = new int[5];
     private static boolean ganador;
 
+    public static File imageUpload = new File("./src/main/resources/img");
+    static boolean loggeado = false;
+    static boolean firstTime = false;
     public static void main(String[] args) {
+
+        port(4567);
 
         staticFiles.location("/");
         enableDebugScreen();
@@ -38,6 +56,7 @@ public class main {
         get("/Inicio", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
+            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes,"Home.ftl");
 
         }, freeMarkerEngine);
@@ -52,14 +71,69 @@ public class main {
         get("/NuevoUsuario", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
+            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes,"Registro.ftl");
+
+        }, freeMarkerEngine);
+
+        get("/Ganadores", (request, response) -> {
+
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("loggeado", loggeado);
+            return new ModelAndView(attributes,"Ganadores.ftl");
 
         }, freeMarkerEngine);
 
         get("/AgregarFondos", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
+            Usuario usuario= request.session().attribute("usuario");
+            List<Tarjeta> tarjetas = usuario.getCuenta().getTarjetas();
+            attributes.put("tarjetas", tarjetas);
             return new ModelAndView(attributes,"AgregarFondos.ftl");
+
+        }, freeMarkerEngine);
+
+        get("/transferirFondos", (request, response) -> {
+
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes,"transferirFondos.ftl");
+
+        }, freeMarkerEngine);
+
+        get("/Transacciones", (request, response) -> {
+
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes,"transacciones.ftl");
+
+        }, freeMarkerEngine);
+
+        get("/Pale", (request, response) -> {
+
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("loggeado", loggeado);
+            return new ModelAndView(attributes,"pale.ftl");
+
+        }, freeMarkerEngine);
+
+        get("/Perfil", (request, response) -> {
+
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("loggeado", loggeado);
+            return new ModelAndView(attributes,"PublicarComentario.ftl");
+
+        }, freeMarkerEngine);
+
+        get("/Usuarios", (request, response) -> {
+
+            List<Usuario> usuarios = UsuarioServices.getInstancia().findAll();
+
+            firstTime = true;
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("first", firstTime);
+            attributes.put("usuarios", usuarios);
+            attributes.put("loggeado", loggeado);
+            return new ModelAndView(attributes,"Usuarios.ftl");
 
         }, freeMarkerEngine);
 
@@ -74,6 +148,11 @@ public class main {
                 usuario.setNombre(request.queryParams("nombre"));
                 usuario.setClave(request.queryParams("clave"));
                 usuario.setFechaNacimiento(request.queryParams("fechanac"));
+
+
+                Cuenta cuenta = new Cuenta(0);
+                CuentaServices.getInstancia().crear(cuenta);
+                usuario.setCuenta(cuenta);
                 UsuarioServices.getInstancia().crear(usuario);
             }
             else {
@@ -84,6 +163,7 @@ public class main {
 
             Map<String, Object> attributes = new HashMap<>();
 
+            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes, "Home.ftl");
         },freeMarkerEngine);
 
@@ -95,18 +175,21 @@ public class main {
             if(UsuarioServices.getInstancia().find(usuario)!=null){
                 Usuario userAux = UsuarioServices.getInstancia().find(usuario);
                 if(userAux.getClave().equals(clave)){
-                    request.session().attribute("usuario", usuario);
+                    request.session().attribute("usuario", userAux);
+                    loggeado = true;
                 }
             }
 
-            response.redirect("/Inicio");
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("loggeado", loggeado);
+            return new ModelAndView(attributes, "Home.ftl");
 
-            return null;
         },freeMarkerEngine);
 
         get("/Fondos", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
+            attributes.put("loggeado",loggeado);
             return new ModelAndView(attributes,"agregarFondos.ftl");
 
         }, freeMarkerEngine);
@@ -224,5 +307,93 @@ public class main {
         }, freeMarkerEngine);
 
 
+        get("/EliminarUsuario/:usuario", (request, response) -> {
+
+            boolean existe = false;
+            String usuario = request.params("usuario");
+
+            UsuarioServices.getInstancia().eliminar(usuario);
+
+            List<Usuario> usuarios = UsuarioServices.getInstancia().findAll();
+            if(usuarios.size()>0){
+                existe = true;
+            }
+            Map<String, Object> attributes = new HashMap<>();
+
+            firstTime = false;
+            attributes.put("existe", existe);
+            attributes.put("usuarios", usuarios);
+
+            return new ModelAndView(attributes, "TableUsuarios.ftl");
+
+        },freeMarkerEngine);
+
+
+        post("/Imagen", "multipart/form-data", (request, response) -> {
+
+            String file_name = "image";
+            Path temp = Paths.get(imageUpload.getAbsolutePath() + file_name+".jpeg");
+            request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+
+            try(InputStream input = request.raw().getPart("image-file").getInputStream()) {
+
+                Files.copy(input, temp, StandardCopyOption.REPLACE_EXISTING);
+
+                byte [] byteI = Files.readAllBytes(temp);
+
+
+
+            }
+
+            response.redirect("/Perfil");
+            return null;
+        });
+
+
+        post("/agregarFondos", (request, response) -> {
+
+            IncrementoFondos fondos = new IncrementoFondos();
+
+            fondos.setMonto(Long.parseLong(request.queryParams("monto")));
+            Date fecha = new Date();
+            fondos.setFecha(fecha.toString());
+
+           Usuario usuario= request.session().attribute("usuario");
+
+            fondos.setUsuario(usuario);
+
+            FondosServices.getInstancia().crear(fondos);
+
+            Cuenta cuenta = CuentaServices.getInstancia().findbyusername(usuario.getUsuario());
+            cuenta.setBalance(cuenta.getBalance() + fondos.getMonto());
+            cuenta.getFondos().add(fondos);
+
+            int opc = Integer.parseInt(request.queryParams("entradaT"));
+
+            if (opc == 3) {
+                Tarjeta tarjeta = TarjetaServices.getInstancia().find(request.queryParams("tarjeta"));
+                fondos.setTarjeta(tarjeta);
+            } else {
+                Tarjeta tarjeta = new Tarjeta();
+
+                tarjeta.setNumero(request.queryParams("card-number"));
+                tarjeta.setCvc(Short.parseShort(request.queryParams("cvc")));
+                tarjeta.setMesVencimiento(request.queryParams("expiry-month"));
+                tarjeta.setYearVencimiento(request.queryParams("expiry-year"));
+
+                usuario.getCuenta().getTarjetas().add(tarjeta);
+                fondos.setTarjeta(tarjeta);
+
+                TarjetaServices.getInstancia().editar(tarjeta);
+                UsuarioServices.getInstancia().editar(usuario);
+            }
+
+            CuentaServices.getInstancia().editar(cuenta);
+            FondosServices.getInstancia().crear(fondos);
+
+            response.redirect("/Inicio");
+            return null;
+
+        });
     }
 }

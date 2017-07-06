@@ -8,6 +8,9 @@
 /**************************************
 link & button
 **************************************/
+.panelUsuarios{
+    width: 1200px;
+}
 .white
 {
 	color:#fff !important;
@@ -426,11 +429,10 @@ margin-top: 5px;
     font-size: 30px;
 
 }
-.panel{
-    padding-top: 100px;
+.panelRegistro{
     width: 700px;
-    margin: 0 auto;
 }
+
 .footer-bottom {
     background: #088DA5;
     position:absolute;

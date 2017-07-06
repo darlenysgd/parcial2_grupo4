@@ -12,6 +12,7 @@
         <class>Entidades.Ganador</class>
         <class>Entidades.Tarjeta</class>
         <class>Entidades.Transaccion</class>
+        <class>Entidades.IncrementoFondos</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:h2:tcp://localhost/~/Parcial2"/>
             <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>

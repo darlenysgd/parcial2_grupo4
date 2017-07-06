@@ -1,6 +1,8 @@
 package Servicios;
 
 
+import Entidades.Usuario;
+
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import java.lang.reflect.Field;
@@ -161,23 +163,25 @@ public class GestionDB<T> {
     }
 
 
-    /*public List<Articulo> pagination(int pageNumber){
+    public List<Usuario> cargarUsuarios(int pageNumber){
         EntityManager em = getEntityManager();
         int pageSize = 5;
         int x = (pageNumber-1) * pageSize;
-        Query query = em.createQuery("from Articulo");
+        Query query = em.createQuery("from Usuario ");
         query.setFirstResult(x);
         query.setMaxResults(pageSize);
-        List <Articulo> articulos = query.getResultList();
+        List <Usuario> usuarios = query.getResultList();
 
-        if (articulos.size() == 0){
+        if (usuarios.size() == 0){
 
             return  null;
         }
 
         else {
 
-            return articulos;
+            return usuarios;
         }
-    }*/
+    }
+
+
 }
