@@ -1,5 +1,6 @@
 <#include "Includes/Header.ftl">
 
+<div class="panel panelRegistro">
 <br>
 <div class="panel">
     <div class="panel-heading  panel-lottery">Registro de Usuarios</div>
@@ -8,10 +9,14 @@
             <div class="form-group">
                 <label>Nombre Completo:</label>
                 <input type="text" class="form-control" name="nombre" data-error="Por Favor, Inserte Su Nombre Completo" required />
-        <div class="help-block with-errors"></div>
-    </div>
+                <div class="help-block with-errors"></div>
+             </div>
             <div class="form-group">
-
+                <label>Cedula:</label>
+                <input type="text" id="cedula" class="form-control" name="cedula" data-error="Por Favor, Inserte Su Cedula" required/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
                 <label>Nombre de usuario:</label>
                 <input type="text" id="username" class="form-control" name="usuario" data-error="Por Favor, Inserte Su Nombre De Usuario" required/>
                 <div class="help-block with-errors"></div>
@@ -26,11 +31,8 @@
                 <input type="date" id="date" class="form-control" name="fechanac" data-error="Por Favor, Inserte Su Fecha de Nacimiento" required/>
                 <div class="help-block with-errors"></div>
             </div>
-            <div class="form-group">
-                <label>Cedula:</label>
-                <input type="text" id="cedula" class="form-control" name="cedula" data-error="Por Favor, Inserte Su Cedula" required/>
-                <div class="help-block with-errors"></div>
-            </div>
+
+
 
             <div class="form-group">
                 <input type="submit" id="btnSubmit" class="form-control" onclick="myFunction()" value="Crear">

@@ -14,20 +14,20 @@ public class Cuenta implements Serializable{
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long codigo;
-    private long balance;
+    private long balance = 0;
 
     @OneToMany (fetch = FetchType.EAGER)
     private List<Transaccion> transacciones;
     @OneToMany (fetch = FetchType.EAGER)
     private List<Tarjeta> tarjetas;
+    @OneToMany
+    private List<IncrementoFondos> Fondos;
 
     public Cuenta() {
     }
 
-    public Cuenta(long balance, List<Transaccion> transacciones, List<Tarjeta> tarjetas) {
+    public Cuenta(long balance) {
         this.balance = balance;
-        this.transacciones = transacciones;
-        this.tarjetas = tarjetas;
     }
 
     public long getCodigo() {
@@ -60,5 +60,13 @@ public class Cuenta implements Serializable{
 
     public void setTarjetas(List<Tarjeta> tarjetas) {
         this.tarjetas = tarjetas;
+    }
+
+    public List<IncrementoFondos> getFondos() {
+        return Fondos;
+    }
+
+    public void setFondos(List<IncrementoFondos> fondos) {
+        Fondos = fondos;
     }
 }

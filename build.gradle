@@ -26,8 +26,4 @@ dependencies {
     runtime 'org.slf4j:slf4j-simple:1.7.21'
 }
 
-repositories {
-    maven {
-        url "http://gitblit.github.io/gitblit-maven/"
-    }
-}
+

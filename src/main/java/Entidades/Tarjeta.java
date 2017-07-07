@@ -15,23 +15,26 @@ public class Tarjeta implements Serializable{
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private long numero;
+    private long id;
+    private String numero;
     private short cvc;
-    private String fechaVencimiento;
+    private String mesVencimiento;
+    private String yearVencimiento;
 
     public Tarjeta() {
     }
 
-    public Tarjeta(short cvc, String fechaVencimiento) {
+    public Tarjeta(short cvc, String mesVencimiento, String yearVencimiento) {
         this.cvc = cvc;
-        this.fechaVencimiento = fechaVencimiento;
+        this.mesVencimiento = mesVencimiento;
+        this.yearVencimiento = yearVencimiento;
     }
 
-    public long getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(long numero) {
+    public void setNumero(String  numero) {
         this.numero = numero;
     }
 
@@ -43,11 +46,19 @@ public class Tarjeta implements Serializable{
         this.cvc = cvc;
     }
 
-    public String getFechaVencimiento() {
-        return fechaVencimiento;
+    public String getMesVencimiento() {
+        return mesVencimiento;
     }
 
-    public void setFechaVencimiento(String fechaVencimiento) {
-        this.fechaVencimiento = fechaVencimiento;
+    public void setMesVencimiento(String mesVencimiento) {
+        this.mesVencimiento = mesVencimiento;
+    }
+
+    public String getYearVencimiento() {
+        return yearVencimiento;
+    }
+
+    public void setYearVencimiento(String yearVencimiento) {
+        this.yearVencimiento = yearVencimiento;
     }
 }

@@ -1,8 +1,6 @@
 package Entidades;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -17,7 +15,7 @@ public class Usuario implements Serializable {
     private String cedula;
     private String nombre;
     private String clave;
-    private boolean adminsitrador;
+    private boolean adminsitrador; //CORREGIR NOMBRE
     private String fechaNacimiento;
     @OneToOne
     private Cuenta cuenta;
@@ -28,6 +26,7 @@ public class Usuario implements Serializable {
         this.usuario = usuario;
         this.clave = clave;
         this.fechaNacimiento = fechaNacimiento;
+        this.adminsitrador = false;
     }
 
     public Usuario() {

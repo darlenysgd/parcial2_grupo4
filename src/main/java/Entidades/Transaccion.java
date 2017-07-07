@@ -30,6 +30,14 @@ public class Transaccion implements Serializable{
     public Transaccion() {
     }
 
+    public long getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(long codigo) {
+        this.codigo = codigo;
+    }
+
     public Usuario getUsuarioOrigen() {
         return usuarioOrigen;
     }
