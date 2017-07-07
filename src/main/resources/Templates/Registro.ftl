@@ -13,7 +13,7 @@
              </div>
             <div class="form-group">
                 <label>Cedula:</label>
-                <input type="text" id="cedula" class="form-control" name="cedula" data-error="Por Favor, Inserte Su Cedula" required/>
+                <input type="text" id="cedula" minlength="11" class="form-control" name="cedula" data-error="Por Favor, Inserte Su Cedula" required/>
                 <div class="help-block with-errors"></div>
             </div>
             <div class="form-group">

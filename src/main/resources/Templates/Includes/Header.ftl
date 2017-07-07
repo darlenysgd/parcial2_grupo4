@@ -28,9 +28,6 @@
     <link href="/datatables/css/dataTables.bootstrap.css" rel="stylesheet">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-
-    <link rel="stylesheet" href="/bootstrapselect/dist/css/bootstrap-select.css">
-
     <!-- =======================================================
           Theme Name: Tempo
           Theme URL: https://bootstrapmade.com/tempo-free-onepage-bootstrap-theme/
@@ -69,7 +66,7 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-text" href="/AgregarFondos">Agregar</a></li>
                                 <li><a class="dropdown-text" href="/transferirFondos">Transferir</a></li>
-                                <li><a class="dropdown-text" href="#">Historial</a></li>
+                                <li><a class="dropdown-text" href="/Transacciones">Historial</a></li>
                             </ul>
                         </li>
                     </#if>
@@ -84,6 +81,9 @@
                     </#if>
                 <#if !loggeado>
                     <li><a href="/InicioSesion">Iniciar Sesión</a></li>
+                </#if>
+                <#if loggeado>
+                    <li><a href="/cerrarSesion">Cerrar Sesión</a></li>
                 </#if>
                 </ul>
             </div>

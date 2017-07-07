@@ -2,19 +2,19 @@
 
 <div style="padding-top:8%" class="col-md-4 col-md-offset-4">
 
-    <form class="form-horizontal" role="form" action="/Pale" method="post">
+    <form class="form-horizontal" role="form" action="/Pale" method="post" data-toggle="validator">
         <div class="form-group">
             <label class="col-md-4 control-label" for="card-holder-name">Monto</label>
             <div class="col-md-8">
-                <input type="text" class="form-control" name="monto" id="monto" placeholder="Monto A Apostar">
+                <input type="number" max="${balance}" class="form-control" name="monto" id="monto" placeholder="Monto A Apostar">
             </div>
         </div>
 
            <div class="col-md-4">
                <br>
                <label>1er. Numero</label>
-            <select class="form-control selectpicker" name="primerNumero" id="primerNumero" >
-                <option>Primero</option>
+            <select class="form-control selectpicker" name="primerNumero" id="primerNumero" required>
+                <option value="">Primero</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -45,8 +45,8 @@
         </div>
         <div class="col-md-4">
             <label>2do. Numero</label>
-            <select class="form-control selectpicker" name="segundoNumero" id="segundoNumero" >
-                <option>Segundo</option>
+            <select class="form-control selectpicker" name="segundoNumero" id="segundoNumero" required>
+                <option value="">Segundo</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -78,8 +78,8 @@
         <div class="col-md-4">
             <br>
             <label>3er. Numero</label>
-            <select class="form-control selectpicker" name="tercerNumero" id="tercerNumero" >
-                <option>Tercero</option>
+            <select class="form-control selectpicker" name="tercerNumero" id="tercerNumero" required>
+                <option value="">Tercero</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -118,6 +118,19 @@
 
 </div>
 
+
+<div class="col-md-4 col-md-offset-4">
+    <form method="get" action="/ganarPale">
+        <div class="form-group">
+            <input type="submit" value="Ganar Ahora" class="form-control">
+        </div>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
 <script type="text/javascript">
     $('#primerNumero').change(function(event) {
         $('#primeraBola').html($('#primerNumero').val());

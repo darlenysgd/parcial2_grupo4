@@ -7,7 +7,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="card-holder-name">Monto</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" name="monto" id="monto" placeholder="Monto A Transferir">
+                    <input type="number" max="${maxTransferencia}" class="form-control" name="monto" id="monto" placeholder="Monto A Transferir">
                 </div>
             </div>
 

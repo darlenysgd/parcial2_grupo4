@@ -2,19 +2,13 @@
 
 <div style="padding-top:8%" class="col-md-10 col-md-offset-2">
 
-    <form class="form-horizontal" role="form" method="post" action="Loto">
-        <div class="form-group">
-            <label class="col-md-2 control-label" for="card-holder-name">Monto a Apostar</label>
-            <div class="col-md-8">
-                <input type="text" class="form-control" name="card-holder-name" id="card-holder-name" placeholder="Monto">
-            </div>
-        </div>
+    <form class="form-horizontal" role="form" method="post" action="Loto" data-toggle="validator">
 
         <div class="col-md-2">
             <br>
             <label>Primer Numero</label>
-            <select class="form-control selectpicker" name="primerNumero" id="primerNumero" >
-                <option>Primero</option>
+            <select class="form-control selectpicker" name="primerNumero" id="primerNumero" required>
+                <option value="">Primero</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -47,8 +41,8 @@
         <div class="col-md-2">
             <br>
             <label>Segundo Numero</label>
-            <select class="form-control selectpicker" name="segundoNumero" id="segundoNumero" >
-                <option>Segundo</option>
+            <select class="form-control selectpicker" name="segundoNumero" id="segundoNumero" required>
+                <option value="">Segundo</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -76,12 +70,13 @@
                     <br>
                 </ul>
             </div>
+
         </div>
         <div class="col-md-2">
             <br>
             <label>Tercer Numero</label>
-            <select class="form-control selectpicker" name="tercerNumero" id="tercerNumero" >
-                <option>Tercero</option>
+            <select class="form-control selectpicker" name="tercerNumero" id="tercerNumero" required>
+                <option value="">Tercero</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -109,12 +104,13 @@
                     <br>
                 </ul>
             </div>
+
         </div>
         <div class="col-md-2">
             <br>
             <label>Cuarto Numero</label>
-            <select class="form-control selectpicker" name="cuartoNumero" id="cuartoNumero" >
-                <option>Cuarto</option>
+            <select class="form-control selectpicker" name="cuartoNumero" id="cuartoNumero" required>
+                <option value="">Cuarto</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -146,8 +142,8 @@
         <div class="col-md-2">
             <br>
             <label>Quinto Numero</label>
-            <select class="form-control selectpicker" name="quintoNumero" id="quintoNumero" >
-                <option>Quinto</option>
+            <select class="form-control selectpicker" name="quintoNumero" id="quintoNumero" required>
+                <option value="">Quinto</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -184,7 +180,22 @@
 
     </form>
 
+
 </div>
+
+<div class="col-md-4 col-md-offset-4">
+<form method="get" action="/ganarLoto">
+    <div class="form-group">
+        <input type="submit" value="Ganar Ahora" class="form-control">
+    </div>
+</form>
+</div>
+<br>
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+
 
 <script type="text/javascript">
     $('#primerNumero').change(function(event) {
