@@ -58,8 +58,8 @@
                         <a class="dropdown-toggle" data-toggle="dropdown">Juegos
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-text" href="#">Palé</a></li>
-                            <li><a class="dropdown-text" href="#">Loto</a></li>
+                            <li><a class="dropdown-text" href="/Pale">Palé</a></li>
+                            <li><a class="dropdown-text" href="/Loto">Loto</a></li>
                         </ul>
                     </li>
                     <#if loggeado>
@@ -68,7 +68,7 @@
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-text" href="/AgregarFondos">Agregar</a></li>
-                                <li><a class="dropdown-text" href="#">Transferir</a></li>
+                                <li><a class="dropdown-text" href="/transferirFondos">Transferir</a></li>
                                 <li><a class="dropdown-text" href="#">Historial</a></li>
                             </ul>
                         </li>

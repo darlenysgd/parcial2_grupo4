@@ -6,13 +6,13 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="card-holder-name">Monto</label>
             <div class="col-md-8">
-                <input type="text" class="form-control" name="card-holder-name" id="card-holder-name" placeholder="Monto A Apostar">
+                <input type="text" class="form-control" name="monto" id="monto" placeholder="Monto A Apostar">
             </div>
         </div>
 
            <div class="col-md-4">
                <br>
-               <label>Primer Numero</label>
+               <label>1er. Numero</label>
             <select class="form-control selectpicker" name="primerNumero" id="primerNumero" >
                 <option>Primero</option>
                 <option value="1">1</option>
@@ -44,7 +44,7 @@
                </div>
         </div>
         <div class="col-md-4">
-            <label>Segundo Numero</label>
+            <label>2do. Numero</label>
             <select class="form-control selectpicker" name="segundoNumero" id="segundoNumero" >
                 <option>Segundo</option>
                 <option value="1">1</option>
@@ -77,7 +77,7 @@
         </div>
         <div class="col-md-4">
             <br>
-            <label>Tercer Numero</label>
+            <label>3er. Numero</label>
             <select class="form-control selectpicker" name="tercerNumero" id="tercerNumero" >
                 <option>Tercero</option>
                 <option value="1">1</option>
@@ -110,7 +110,7 @@
         </div>
         <div style="padding-top: 50%" class="form-group">
                <div class="col-sm-offset-4 col-sm-4">
-                <input type="submit" class="btn btn-success" value="Realizar Apuesta"></input>
+                <input type="submit" class="btn btn-success" style="background: #088DA5; color: white" value="Realizar Apuesta"/>
             </div>
         </div>
 
