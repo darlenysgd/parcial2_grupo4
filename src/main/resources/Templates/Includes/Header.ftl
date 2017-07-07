@@ -77,15 +77,12 @@
                     <#if loggeado>
                         <li><a href="/Usuarios">Usuarios</a> </li>
                         <li><a href="#">Perfil</a> </li>
-                        <li><a href="#">Cerrar Sesión</a></li>
+                        <li><a href="/cerrarSesion">Cerrar Sesión</a></li>
                     </#if>
                 <#if !loggeado>
                     <li><a href="/InicioSesion">Iniciar Sesión</a></li>
                 </#if>
-                <#if loggeado>
-                    <li><a href="/cerrarSesion">Cerrar Sesión</a></li>
-                </#if>
-                </ul>
+               </ul>
             </div>
         </div>
     </nav>
