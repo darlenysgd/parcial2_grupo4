@@ -8,8 +8,8 @@
             <div class="jumbotron">
                 <h1 class="small"><strong>Selecciona un juego y empieza a ganar</strong></h1>
                 <div class="bannerButtons">
-                    <a href="#" class="btn btn-banner">Palé</a>
-                    <a href="#" class="btn btn-banner">Loto</a>
+                    <a href="/Pale" class="btn btn-banner">Palé</a>
+                    <a href="/Loto" class="btn btn-banner">Loto</a>
                 </div>
             </div>
         </div>

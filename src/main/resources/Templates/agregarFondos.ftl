@@ -55,7 +55,8 @@
                             <label class="col-sm-3 control-label" for="expiry-month">Fecha de Expiracion</label>
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <select class="form-control col-sm-2 " name="expiry-month" id="expiry-month">
+                                    <select class="form-control col-sm-2 " name="expiry-month" id="expiry-month" required>
+                                        <option value=""></option>
                                         <option value="01">Jan (01)</option>
                                         <option value="02">Feb (02)</option>
                                         <option value="03">Mar (03)</option>
@@ -71,7 +72,8 @@
                                     </select>
                                 </div>
                                 <div class="col-xs-3">
-                                    <select class="form-control" name="expiry-year">
+                                    <select class="form-control" name="expiry-year" required>
+                                        <option value=""></option>
                                         <option value="17">2017</option>
                                         <option value="18">2018</option>
                                         <option value="19">2019</option>
@@ -90,7 +92,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label" data-minlength="3" for="cvv">CVC</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" name="cvc" id="cvc" placeholder="Codigo de Seguridad">
+                                <input type="text" class="form-control" name="cvc" id="cvc" placeholder="Codigo de Seguridad" required>
                             </div>
                         </div>
                     </div>
