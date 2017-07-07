@@ -7,13 +7,7 @@ import Servicios.*;
 import freemarker.template.Configuration;
 import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
-import sun.misc.BASE64Decoder;
-
-import javax.imageio.ImageIO;
-import javax.management.monitor.GaugeMonitor;
 import javax.servlet.MultipartConfigElement;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -38,6 +32,7 @@ public class main {
     private static boolean ganador;
 
     public static File imageUpload = new File("./src/main/resources/img");
+
     static boolean loggeado = false;
     static boolean firstTime = false;
     static  Usuario userAux = null;
@@ -46,6 +41,8 @@ public class main {
         port(4567);
 
         staticFiles.location("/");
+        staticFiles.externalLocation(System.getProperty("java.io.tmpdir"));
+
         enableDebugScreen();
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
         configuration.setClassForTemplateLoading(main.class, "/Templates");
@@ -77,13 +74,7 @@ public class main {
 
         }, freeMarkerEngine);
 
-        get("/Ganadores", (request, response) -> {
 
-            Map<String, Object> attributes = new HashMap<>();
-            attributes.put("loggeado", loggeado);
-            return new ModelAndView(attributes,"Ganadores.ftl");
-
-        }, freeMarkerEngine);
 
             get("/AgregarFondos", (request, response) -> {
 
@@ -122,7 +113,7 @@ public class main {
 
         }, freeMarkerEngine);
 
-        get("/Perfil", (request, response) -> {
+        get("/CompartirGanador", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("loggeado", loggeado);
@@ -351,25 +342,72 @@ public class main {
 
         },freeMarkerEngine);
 
+        get("/Ganadores", (request, response) -> {
 
-        post("/Imagen", "multipart/form-data", (request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
 
-            String file_name = "image";
+            if(GanadorServices.getInstancia().findAll() != null){
+
+                attributes.put("ganadores", GanadorServices.getInstancia().findAll());
+            }
+            else{
+
+                List<Ganador> ganadoresAux = new ArrayList<>();
+                attributes.put("ganadores", ganadoresAux);
+            }
+            attributes.put("loggeado", loggeado);
+            return new ModelAndView(attributes, "Ganadores.ftl");
+        },freeMarkerEngine);
+
+        post("/publicarGanador", "multipart/form-data", (request, response) -> {
+
+            Map<String, Object> attributes = new HashMap<>();
+
+            List<String> rutas = new ArrayList<>();
+            Ganador ganador = new Ganador();
+                    String file_name = "image";
+
+
             Path temp = Paths.get(imageUpload.getAbsolutePath() + file_name+".jpeg");
+
             request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
 
             try(InputStream input = request.raw().getPart("image-file").getInputStream()) {
 
+
                 Files.copy(input, temp, StandardCopyOption.REPLACE_EXISTING);
 
-                byte [] byteI = Files.readAllBytes(temp);
-
-
-
+                byte[] byteI = Files.readAllBytes(temp);
+                ganador.setImagen(byteI);
             }
 
-            response.redirect("/Perfil");
+            ganador.setUsuario(userAux);
+            ganador.setMensaje(request.queryParams("comentario"));
+            GanadorServices.getInstancia().crear(ganador);
+
+            File imageUpload1 = new File(System.getProperty("java.io.tmpdir"));
+
+            List<Ganador> ganadores = GanadorServices.getInstancia().findAll();
+
+            for(Ganador ganadorAux : ganadores){
+
+                File temp2 = File.createTempFile("image", ".jpeg", imageUpload1);
+
+                FileOutputStream fos = new FileOutputStream(temp2);
+
+                fos.write(ganadorAux.getImagen());
+
+                ganadorAux.setRutaImagen(temp2.getName());
+
+                GanadorServices.getInstancia().editar(ganadorAux);
+            }
+
+            attributes.put("ganadores", GanadorServices.getInstancia().findAll());
+            attributes.put("loggeado", loggeado);
+            response.redirect("/Ganadores");
+
             return null;
+
         });
 
 

@@ -1,5 +1,5 @@
 <br>
-<div class="footer-bottom">
+<div class="footer-bottom" style="bottom: 0">
     <div class="container">
         <div style="visibility: visible; animation-name: zoomIn;" class="col-md-12 text-center wow zoomIn">
             <div class="footer_copyright">
@@ -11,11 +11,6 @@
 
 </body>
 </html>
-
-
-
-
-
 
 <script src="/js/jquery.min.js"></script>
 <script src="/js/jquery.easing.min.js"></script>
