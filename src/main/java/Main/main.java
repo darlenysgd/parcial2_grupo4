@@ -40,10 +40,7 @@ public class main {
     public static File imageUpload = new File("./src/main/resources/img");
     static boolean loggeado = false;
     static boolean firstTime = false;
-    static  Usuario userAux = null;
     public static void main(String[] args) {
-
-        port(4567);
 
         staticFiles.location("/");
         enableDebugScreen();
@@ -53,6 +50,9 @@ public class main {
 
 
         BootStrapService.getInstancia().init();
+
+
+
 
         get("/Inicio", (request, response) -> {
 
@@ -85,34 +85,67 @@ public class main {
 
         }, freeMarkerEngine);
 
-            get("/AgregarFondos", (request, response) -> {
+
+        before("/AgregarFondos", (request, response) -> {
+
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
+            }
+        });
+
+        get("/AgregarFondos", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
             Usuario usuario= request.session().attribute("usuario");
-
-            if(usuario.getCuenta().getTarjetas() != null) {
-                List<Tarjeta> tarjetas = UsuarioServices.getInstancia().find(usuario.getUsuario()).getCuenta().getTarjetas();
-                attributes.put("tarjetas", tarjetas);
-            }else{
-                List<Tarjeta> tarjAux = new ArrayList<>();
-                attributes.put("tarjetas", tarjAux);
-            }
-
-            attributes.put("loggeado", loggeado);
+            List<Tarjeta> tarjetas = usuario.getCuenta().getTarjetas();
+            attributes.put("tarjetas", tarjetas);
             return new ModelAndView(attributes,"AgregarFondos.ftl");
 
         }, freeMarkerEngine);
 
 
+     //   before("/transferirFondos", (request, response) -> {
+
+       //     Usuario str = request.session().attribute("usuario");
+         //   if (str == null){
+           //     response.redirect("/InicioSesion");
+           // }
+        //});
+
+        get("/transferirFondos", (request, response) -> {
+
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("loggeado", loggeado);
+            return new ModelAndView(attributes,"transferirFondos.ftl");
+
+        }, freeMarkerEngine);
+
+        before("/Transacciones", (request, response) -> {
+
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
+            }
+        });
+
 
         get("/Transacciones", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
-
-            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes,"transacciones.ftl");
 
         }, freeMarkerEngine);
+
+
+        before("/Pale", (request, response) -> {
+
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
+            }
+        });
+
 
         get("/Pale", (request, response) -> {
 
@@ -122,6 +155,15 @@ public class main {
 
         }, freeMarkerEngine);
 
+        before("/Perfil", (request, response) -> {
+
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
+            }
+        });
+
+
         get("/Perfil", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
@@ -129,6 +171,15 @@ public class main {
             return new ModelAndView(attributes,"PublicarComentario.ftl");
 
         }, freeMarkerEngine);
+
+        before("/Usuarios", (request, response) -> {
+
+            Usuario str = request.session().attribute("usuario");
+            if (str == null || str.isAdminsitrador() == false){
+                response.redirect("/InicioSesion");
+            }
+        });
+
 
         get("/Usuarios", (request, response) -> {
 
@@ -142,6 +193,7 @@ public class main {
             return new ModelAndView(attributes,"Usuarios.ftl");
 
         }, freeMarkerEngine);
+
 
         post("/CrearUsuario", (request, response) -> {
 
@@ -179,7 +231,7 @@ public class main {
             String clave = request.queryParams("clave");
 
             if(UsuarioServices.getInstancia().find(usuario)!=null){
-                userAux = UsuarioServices.getInstancia().find(usuario);
+                Usuario userAux = UsuarioServices.getInstancia().find(usuario);
                 if(userAux.getClave().equals(clave)){
                     request.session().attribute("usuario", userAux);
                     loggeado = true;
@@ -192,6 +244,14 @@ public class main {
 
         },freeMarkerEngine);
 
+        before("/Fondos", (request, response) -> {
+
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
+            }
+        });
+
         get("/Fondos", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
@@ -200,24 +260,23 @@ public class main {
 
         }, freeMarkerEngine);
 
-        get("/transferirFondos", (request, response) -> {
 
+        before("/Transacciones", (request, response) -> {
 
-            Map<String, Object> attributes = new HashMap<>();
-
-            if(UsuarioServices.getInstancia().findAll() != null) {
-                List<Usuario> usuarios = UsuarioServices.getInstancia().findAll();
-                attributes.put("usuarios", usuarios);
-            }else{
-                List<Usuario> usuariosAux = new ArrayList<>();
-                attributes.put("usuarios", usuariosAux);
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
             }
+        });
 
 
-            attributes.put("loggeado", loggeado);
-            return new ModelAndView(attributes,"transferirFondos.ftl");
+        before("/Pale", (request, response) -> {
 
-        }, freeMarkerEngine);
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
+            }
+        });
 
 
         get("/Pale", (request, response) -> {
@@ -257,6 +316,14 @@ public class main {
             return null;
         }, freeMarkerEngine);
 
+        before("/resultadoPale", (request, response) -> {
+
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
+            }
+        });
+
         get("/resultadoPale", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
@@ -266,6 +333,15 @@ public class main {
             return new ModelAndView(attributes,"resultadoPale.ftl");
 
         }, freeMarkerEngine);
+
+        before("/Loto", (request, response) -> {
+
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
+            }
+        });
+
 
         get("/Loto", (request, response) -> {
 
@@ -307,6 +383,15 @@ public class main {
             return null;
 
         }, freeMarkerEngine);
+
+        before("/resultadoLoto", (request, response) -> {
+
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
+            }
+        });
+
         get("/resultadoLoto", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
@@ -317,6 +402,14 @@ public class main {
             return new ModelAndView(attributes,"resultadoLoto.ftl");
 
         }, freeMarkerEngine);
+
+        before("/EliminarUsuario/:usuario", (request, response) -> {
+
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
+            }
+        });
 
 
         get("/EliminarUsuario/:usuario", (request, response) -> {
@@ -360,6 +453,13 @@ public class main {
             response.redirect("/Perfil");
             return null;
         });
+        before("/agregarFondos", (request, response) -> {
+
+            Usuario str = request.session().attribute("usuario");
+            if (str == null){
+                response.redirect("/InicioSesion");
+            }
+        });
 
 
         post("/agregarFondos", (request, response) -> {
@@ -370,10 +470,11 @@ public class main {
             Date fecha = new Date();
             fondos.setFecha(fecha.toString());
 
-            Usuario usuario= request.session().attribute("usuario");
+           Usuario usuario= request.session().attribute("usuario");
 
             fondos.setUsuario(usuario);
 
+            FondosServices.getInstancia().crear(fondos);
 
             Cuenta cuenta = CuentaServices.getInstancia().findbyusername(usuario.getUsuario());
             cuenta.setBalance(cuenta.getBalance() + fondos.getMonto());
@@ -392,22 +493,29 @@ public class main {
                 tarjeta.setMesVencimiento(request.queryParams("expiry-month"));
                 tarjeta.setYearVencimiento(request.queryParams("expiry-year"));
 
-                cuenta.getTarjetas().add(tarjeta);
+                usuario.getCuenta().getTarjetas().add(tarjeta);
                 fondos.setTarjeta(tarjeta);
 
-                TarjetaServices.getInstancia().crear(tarjeta);
+                TarjetaServices.getInstancia().editar(tarjeta);
                 UsuarioServices.getInstancia().editar(usuario);
             }
 
-            FondosServices.getInstancia().editar(fondos);
             CuentaServices.getInstancia().editar(cuenta);
-
+            FondosServices.getInstancia().crear(fondos);
 
             response.redirect("/Inicio");
             return null;
 
         });
 
+        get("/cerrarSesion", (request, response) -> {
+
+            request.session().invalidate();
+            //logged = false;
+            //usuario1 = null;
+            response.redirect("/Inicio");
+            return null;
+        }, freeMarkerEngine );
 
     }
 }
