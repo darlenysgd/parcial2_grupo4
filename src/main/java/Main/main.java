@@ -21,6 +21,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +39,7 @@ public class main {
     private static int[] lotoGanadores = new int[5];
     private static boolean ganador;
     private static Usuario user1;
+    private static SecureRandom number;
 
 
     public static File imageUpload = new File("./src/main/resources/img");
@@ -54,6 +57,12 @@ public class main {
         BootStrapService.getInstancia().init();
 
 
+
+        try {
+            number = SecureRandom.getInstance("SHA1PRNG");
+        } catch(NoSuchAlgorithmException nsae) {
+            // Process the exception in some way or the other
+        }
 
 
         get("/Inicio", (request, response) -> {
@@ -292,7 +301,7 @@ public class main {
         paleJugados[2] = Tercero;
 
         for (int i = 0; i < 3; i++){
-            paleGanadores[i] = (int) (Math.random() * 12) + 1;
+            paleGanadores[i] = number.nextInt(12);
         }
 
 
@@ -385,7 +394,7 @@ public class main {
             lotoJugados[4] = Quinto;
 
             for (int i = 0; i < 5; i++){
-                lotoGanadores[i] = (int) (Math.random() * 20) + 1;
+                lotoGanadores[i] = number.nextInt(20);
             }
 
 
