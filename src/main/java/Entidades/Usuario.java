@@ -17,7 +17,7 @@ public class Usuario implements Serializable {
     private String clave;
     private boolean adminsitrador; //CORREGIR NOMBRE
     private String fechaNacimiento;
-    @OneToOne
+    @OneToOne ( cascade = CascadeType.MERGE)
     private Cuenta cuenta;
 
     public Usuario(String cedula, String nombre, String usuario, String clave, String fechaNacimiento) {

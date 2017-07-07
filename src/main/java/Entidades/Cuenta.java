@@ -16,11 +16,11 @@ public class Cuenta implements Serializable{
     private long codigo;
     private long balance = 0;
 
-    @OneToMany (fetch = FetchType.EAGER)
+    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Transaccion> transacciones;
-    @OneToMany (fetch = FetchType.EAGER)
+    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Tarjeta> tarjetas;
-    @OneToMany
+    @OneToMany (cascade = CascadeType.ALL)
     private List<IncrementoFondos> Fondos;
 
     public Cuenta() {

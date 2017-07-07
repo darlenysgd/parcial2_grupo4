@@ -28,6 +28,9 @@
     <link href="/datatables/css/dataTables.bootstrap.css" rel="stylesheet">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
+    <link rel="stylesheet" href="/bootstrapselect/dist/css/bootstrap-select.css">
+
     <!-- =======================================================
           Theme Name: Tempo
           Theme URL: https://bootstrapmade.com/tempo-free-onepage-bootstrap-theme/

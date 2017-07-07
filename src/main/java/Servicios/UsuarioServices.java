@@ -1,5 +1,6 @@
 package Servicios;
 
+import Entidades.Cuenta;
 import Entidades.Usuario;
 
 import javax.persistence.EntityManager;
@@ -24,6 +25,8 @@ public class UsuarioServices extends GestionDB<Usuario>{
         }
         return instancia;
     }
+
+
 
 
 

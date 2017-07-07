@@ -34,7 +34,7 @@
                                 <div class="col-xs-3">
                                     <select class="form-control col-sm-2 " name="tarjeta" id="tarjeta">
                                         <#list tarjetas as tarjeta>
-                                            <option>${tarjeta.numero}</option>
+                                            <option value="${tarjeta_index}">${tarjeta.numero}</option>
                                         </#list>
                                     </select>
                                 </div>

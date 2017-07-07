@@ -40,6 +40,7 @@ public class main {
     public static File imageUpload = new File("./src/main/resources/img");
     static boolean loggeado = false;
     static boolean firstTime = false;
+    static  Usuario userAux = null;
     public static void main(String[] args) {
 
         port(4567);
@@ -84,26 +85,31 @@ public class main {
 
         }, freeMarkerEngine);
 
-        get("/AgregarFondos", (request, response) -> {
+            get("/AgregarFondos", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
             Usuario usuario= request.session().attribute("usuario");
-            List<Tarjeta> tarjetas = usuario.getCuenta().getTarjetas();
-            attributes.put("tarjetas", tarjetas);
+
+            if(usuario.getCuenta().getTarjetas() != null) {
+                List<Tarjeta> tarjetas = UsuarioServices.getInstancia().find(usuario.getUsuario()).getCuenta().getTarjetas();
+                attributes.put("tarjetas", tarjetas);
+            }else{
+                List<Tarjeta> tarjAux = new ArrayList<>();
+                attributes.put("tarjetas", tarjAux);
+            }
+
+            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes,"AgregarFondos.ftl");
 
         }, freeMarkerEngine);
 
-        get("/transferirFondos", (request, response) -> {
 
-            Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes,"transferirFondos.ftl");
-
-        }, freeMarkerEngine);
 
         get("/Transacciones", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
+
+            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes,"transacciones.ftl");
 
         }, freeMarkerEngine);
@@ -173,7 +179,7 @@ public class main {
             String clave = request.queryParams("clave");
 
             if(UsuarioServices.getInstancia().find(usuario)!=null){
-                Usuario userAux = UsuarioServices.getInstancia().find(usuario);
+                userAux = UsuarioServices.getInstancia().find(usuario);
                 if(userAux.getClave().equals(clave)){
                     request.session().attribute("usuario", userAux);
                     loggeado = true;
@@ -196,17 +202,23 @@ public class main {
 
         get("/transferirFondos", (request, response) -> {
 
+
             Map<String, Object> attributes = new HashMap<>();
+
+            if(UsuarioServices.getInstancia().findAll() != null) {
+                List<Usuario> usuarios = UsuarioServices.getInstancia().findAll();
+                attributes.put("usuarios", usuarios);
+            }else{
+                List<Usuario> usuariosAux = new ArrayList<>();
+                attributes.put("usuarios", usuariosAux);
+            }
+
+
+            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes,"transferirFondos.ftl");
 
         }, freeMarkerEngine);
 
-        get("/Transacciones", (request, response) -> {
-
-            Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes,"transacciones.ftl");
-
-        }, freeMarkerEngine);
 
         get("/Pale", (request, response) -> {
 
@@ -358,11 +370,10 @@ public class main {
             Date fecha = new Date();
             fondos.setFecha(fecha.toString());
 
-           Usuario usuario= request.session().attribute("usuario");
+            Usuario usuario= request.session().attribute("usuario");
 
             fondos.setUsuario(usuario);
 
-            FondosServices.getInstancia().crear(fondos);
 
             Cuenta cuenta = CuentaServices.getInstancia().findbyusername(usuario.getUsuario());
             cuenta.setBalance(cuenta.getBalance() + fondos.getMonto());
@@ -381,19 +392,22 @@ public class main {
                 tarjeta.setMesVencimiento(request.queryParams("expiry-month"));
                 tarjeta.setYearVencimiento(request.queryParams("expiry-year"));
 
-                usuario.getCuenta().getTarjetas().add(tarjeta);
+                cuenta.getTarjetas().add(tarjeta);
                 fondos.setTarjeta(tarjeta);
 
-                TarjetaServices.getInstancia().editar(tarjeta);
+                TarjetaServices.getInstancia().crear(tarjeta);
                 UsuarioServices.getInstancia().editar(usuario);
             }
 
+            FondosServices.getInstancia().editar(fondos);
             CuentaServices.getInstancia().editar(cuenta);
-            FondosServices.getInstancia().crear(fondos);
+
 
             response.redirect("/Inicio");
             return null;
 
         });
+
+
     }
 }
