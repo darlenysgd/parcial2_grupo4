@@ -4,7 +4,7 @@
     <legend>Los Números Ganadores Son:</legend>
     <div class="col-md-4">
         <br>
-        <label>Primer Numero</label>
+        <label>1er. Numero</label>
         <div id="numeros">
             <ul class="loto-balls ">
                 <li class="loto-ball"><span>${ganadores[0]}</span></li>
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        <label>Segundo Numero</label>
+        <label>2do. Numero</label>
         <div id="numeros">
             <ul class="loto-balls ">
                 <li class="loto-ball"><span>${ganadores[1]}</span></li>
@@ -23,7 +23,7 @@
     </div>
     <div class="col-md-4">
         <br>
-        <label>Tercer Numero</label>
+        <label>3er. Numero</label>
         <div id="numeros">
             <ul class="loto-balls ">
                 <li class="loto-ball"><span>${ganadores[2]}</span></li>
@@ -34,11 +34,13 @@
 
 </div>
 
+
+
 <div class="col-md-4 col-md-offset-4">
     <legend>Usted Jugó:</legend>
     <div class="col-md-4">
         <br>
-        <label>Primer Numero</label>
+        <label>1er. Numero</label>
         <div id="numeros">
             <ul class="loto-balls ">
                 <li class="loto-ball"><span>${jugados[0]}</span></li>
@@ -47,7 +49,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        <label>Segundo Numero</label>
+        <label>2do. Numero</label>
         <div id="numeros">
             <ul class="loto-balls ">
                 <li class="loto-ball"><span>${jugados[1]}</span></li>
@@ -57,7 +59,7 @@
     </div>
     <div class="col-md-4">
         <br>
-        <label>Tercer Numero</label>
+        <label>3er. Numero</label>
         <div id="numeros">
             <ul class="loto-balls ">
                 <li class="loto-ball"><span>${jugados[2]}</span></li>

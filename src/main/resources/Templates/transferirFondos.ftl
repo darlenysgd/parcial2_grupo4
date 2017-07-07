@@ -16,14 +16,16 @@
                 <div class="col-sm-9">
                     <select id="basic" class="selectpicker show-tick form-control" name="usuario" data-live-search="true">
                         <#list usuarios as usuario>
-                            <option value="${usuario_index}">${usuario.usuario}</option>
+                            <#if Usrorigen.usuario != usuario.usuario>
+                                <option value="${usuario.usuario}">${usuario.usuario}</option>
+                            </#if>
                         </#list>
                     </select>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-9">
-                    <button type="button" class="btn" style="background: #088DA5; color: white" >Transferir</button>
+                    <button type="submit" class="btn" style="background: #088DA5; color: white" >Transferir</button>
                 </div>
             </div>
         </fieldset>

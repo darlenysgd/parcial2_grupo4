@@ -40,7 +40,10 @@ public class main {
     public static File imageUpload = new File("./src/main/resources/img");
     static boolean loggeado = false;
     static boolean firstTime = false;
+    static  Usuario userAux = null;
     public static void main(String[] args) {
+
+        port(4567);
 
         staticFiles.location("/");
         enableDebugScreen();
@@ -50,9 +53,6 @@ public class main {
 
 
         BootStrapService.getInstancia().init();
-
-
-
 
         get("/Inicio", (request, response) -> {
 
@@ -98,8 +98,16 @@ public class main {
 
             Map<String, Object> attributes = new HashMap<>();
             Usuario usuario= request.session().attribute("usuario");
-            List<Tarjeta> tarjetas = usuario.getCuenta().getTarjetas();
-            attributes.put("tarjetas", tarjetas);
+
+            if(usuario.getCuenta().getTarjetas() != null) {
+                List<Tarjeta> tarjetas = UsuarioServices.getInstancia().find(usuario.getUsuario()).getCuenta().getTarjetas();
+                attributes.put("tarjetas", tarjetas);
+            }else{
+                List<Tarjeta> tarjAux = new ArrayList<>();
+                attributes.put("tarjetas", tarjAux);
+            }
+
+            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes,"AgregarFondos.ftl");
 
         }, freeMarkerEngine);
@@ -260,6 +268,15 @@ public class main {
 
         }, freeMarkerEngine);
 
+        get("/transferirFondos", (request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+
+            if(UsuarioServices.getInstancia().findAll() != null) {
+                List<Usuario> usuarios = UsuarioServices.getInstancia().findAll();
+                attributes.put("usuarios", usuarios);
+            }else{
+                List<Usuario> usuariosAux = new ArrayList<>();
+                attributes.put("usuarios", usuariosAux);
 
         before("/Transacciones", (request, response) -> {
 
@@ -267,6 +284,10 @@ public class main {
             if (str == null){
                 response.redirect("/InicioSesion");
             }
+            attributes.put("Usrorigen", userAux);
+            attributes.put("loggeado", loggeado);
+
+            return new ModelAndView(attributes,"transferirFondos.ftl");
         });
 
 
@@ -278,11 +299,11 @@ public class main {
             }
         });
 
-
         get("/Pale", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
 
+            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes,"pale.ftl");
 
 
@@ -296,6 +317,8 @@ public class main {
         int Segundo = Integer.parseInt(request.queryParams("segundoNumero"));
         int Tercero = Integer.parseInt(request.queryParams("tercerNumero"));
 
+        long montoApostado = Long.parseLong(request.queryParams("monto"));
+
         paleJugados[0] = Primero;
         paleJugados[1] = Segundo;
         paleJugados[2] = Tercero;
@@ -307,10 +330,17 @@ public class main {
 
         for (int j = 0; j< 3 ; j++){
 
-            if(paleGanadores[j] == paleJugados[0]){
-                ganador = true;
+            if(paleGanadores[j] == paleJugados[j]){
+                cont ++;
             }
 
+        }
+
+        if(cont == 3){
+            ganador = true;
+            long ganancias = montoApostado * 1000;
+            userAux.getCuenta().setBalance(userAux.getCuenta().getBalance() + ganancias);
+            UsuarioServices.getInstancia().editar(userAux);
         }
         response.redirect("/resultadoPale");
             return null;
@@ -330,6 +360,7 @@ public class main {
             attributes.put("jugados", paleJugados);
             attributes.put("ganadores", paleGanadores);
             attributes.put("ganador", ganador);
+            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes,"resultadoPale.ftl");
 
         }, freeMarkerEngine);
@@ -346,6 +377,7 @@ public class main {
         get("/Loto", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
+            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes,"loto.ftl");
 
         }, freeMarkerEngine);
@@ -374,11 +406,12 @@ public class main {
 
             for (int j = 0; j< 5 ; j++){
 
-                if(lotoGanadores[j] == lotoJugados[0]){
-                    ganador = true;
+                if(lotoGanadores[j] == lotoJugados[j]){
+
                 }
 
             }
+
             response.redirect("/resultadoLoto");
             return null;
 
@@ -399,6 +432,7 @@ public class main {
             attributes.put("ganadores", lotoGanadores);
             attributes.put("jugados", lotoJugados);
             attributes.put("ganador", ganador);
+            attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes,"resultadoLoto.ftl");
 
         }, freeMarkerEngine);
@@ -506,6 +540,31 @@ public class main {
             response.redirect("/Inicio");
             return null;
 
+        });
+
+        post("/transferirDinero", (request, response) -> {
+
+            Transaccion transaccion = new Transaccion();
+            long monto = Long.parseLong(request.queryParams("monto"));
+            transaccion.setMontoTransferido(monto);
+            Usuario destino = UsuarioServices.getInstancia().find(request.queryParams("usuario"));
+            transaccion.setUsuarioDestino(destino);
+            transaccion.setUsuarioOrigen(userAux);
+            userAux.getCuenta().setBalance(userAux.getCuenta().getBalance() - monto);
+            Date fecha = new Date();
+            transaccion.setFecha(fecha.toString());
+            destino.getCuenta().setBalance(destino.getCuenta().getBalance() + monto);
+
+            TransaccionServices.getInstancia().crear(transaccion);
+
+            userAux.getCuenta().getTransacciones().add(transaccion);
+
+            UsuarioServices.getInstancia().editar(destino);
+            UsuarioServices.getInstancia().editar(userAux);
+
+            response.redirect("/transferirFondos");
+
+            return null;
         });
 
         get("/cerrarSesion", (request, response) -> {
