@@ -79,14 +79,13 @@
                         <li><a href="/Usuarios">Usuarios</a> </li>
                         <li><a href="/Ganadores">Ganadores</a> </li>
 
+
+                        <li><a href="/cerrarSesion">Cerrar Sesión</a></li>
                     </#if>
                 <#if !loggeado>
                     <li><a href="/InicioSesion">Iniciar Sesión</a></li>
                 </#if>
-                <#if loggeado>
-                    <li><a href="/cerrarSesion">Cerrar Sesión</a></li>
-                </#if>
-                </ul>
+               </ul>
             </div>
         </div>
     </nav>
