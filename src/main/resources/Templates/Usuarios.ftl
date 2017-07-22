@@ -9,6 +9,7 @@
         <th>Nombre</th>
         <th>Usuario</th>
         <th>Permimsos</th>
+        <th>Cambio Permisos</th>
         <th>Eliminar</th>
     </tr>
     </thead>
@@ -26,6 +27,15 @@
                 <#else>
                     <td>Regular</td>
                 </#if>
+                <td>
+                <#if usuario.adminsitrador>
+                <button  class="btn btn-icon" data-toggle="modal" data-target="#ModalPermisos">Regular</button>
+                <#else>
+                    <button  class="btn btn-icon" data-toggle="modal" data-target="#ModalPermisos">Administrador</button>
+                </#if>
+
+
+                </td>
                 <td>
                     <button  class="btn btn-icon" data-toggle="modal" data-target="#ModalEliminar">Eliminar</button>
                 </td>
@@ -58,15 +68,44 @@
     </div>
 </div>
 
+<div class="modal fade" id="ModalPermisos" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header alert-danger">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Cambios de permisos de usuario</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea cambiar el permiso de este usuario?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="permisos('${usr}')" class="btn btn-default" data-dismiss="modal">Si</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     function actualizarTabla(usuario){
 
     $.get("/EliminarUsuario/"+usuario, function (data) {
-    $(".tablaUsuarios").html(data)
+        $(".tablaUsuarios").html(data)
 
     })
     }
+
+    function permisos(usuario) {
+        $.get("/CambiarPermisos/"+usuario, function (data) {
+            $(".tablaUsuarios").html(data)
+
+        })
+    }
+
+
 
     $('#demo-dt-basic').dataTable({
         "sInfo" : false

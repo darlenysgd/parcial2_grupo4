@@ -2,7 +2,14 @@
 
 <div style="padding-top:8%" class="col-md-10 col-md-offset-2">
 
-    <form class="form-horizontal" role="form" method="post" action="Loto" data-toggle="validator">
+    <form class="form-horizontal" role="form" method="post" action="/Loto" data-toggle="validator">
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="card-holder-name">Acumulado</label>
+            <div class="col-md-8">
+                <input value="${acumulado}" readonly/>
+            </div>
+        </div>
 
         <div class="col-md-2">
             <br>
@@ -174,7 +181,12 @@
         </div>
         <div style="padding-top: 15%" class="form-group">
             <div class="col-sm-offset-4 col-sm-4">
-                <input type="submit" class="btn btn-success" value="Realizar Apuesta"></input>
+                <input type="submit" class="btn" style="background: #088DA5; color: white"  value="Realizar Apuesta"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="checkbox">
+                <label><input type="checkbox" name="ganar" value="0">Ganar</label>
             </div>
         </div>
 
@@ -183,13 +195,7 @@
 
 </div>
 
-<div class="col-md-4 col-md-offset-4">
-<form method="get" action="/ganarLoto">
-    <div class="form-group">
-        <input type="submit" value="Ganar Ahora" class="form-control">
-    </div>
-</form>
-</div>
+
 <br>
 
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>

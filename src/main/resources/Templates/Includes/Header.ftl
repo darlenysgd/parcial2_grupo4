@@ -61,12 +61,13 @@
                     </li>
                     <#if loggeado>
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Fondos
+                            <a class="dropdown-toggle" data-toggle="dropdown">Fondos
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-text" href="/AgregarFondos">Agregar</a></li>
                                 <li><a class="dropdown-text" href="/transferirFondos">Transferir</a></li>
-                                <li><a class="dropdown-text" href="/Transacciones">Historial</a></li>
+                                <li><a class="dropdown-text" href="/Transacciones">Transacciones 3ros.</a></li>
+                                <li><a class="dropdown-text" href="/HistorialIngresos">Ingresos</a></li>
                             </ul>
                         </li>
                     </#if>
@@ -76,8 +77,8 @@
 
                     <#if loggeado>
                         <li><a href="/Usuarios">Usuarios</a> </li>
-                        <li><a href="#">Perfil</a> </li>
-                        <li><a href="#">Cerrar Sesión</a></li>
+                        <li><a href="/Ganadores">Ganadores</a> </li>
+
                     </#if>
                 <#if !loggeado>
                     <li><a href="/InicioSesion">Iniciar Sesión</a></li>

@@ -25,7 +25,7 @@ public class BootStrapService {
     public void startDb() {
         try {
             Server.createTcpServer("-tcpPort",
-                    "9093",
+                    "9092",
                     "-tcpAllowOthers",
                     "-tcpDaemon").start();
         }catch (SQLException ex){

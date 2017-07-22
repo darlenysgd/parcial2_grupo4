@@ -3,6 +3,14 @@
     <form class="form-horizontal"  action="/agregarFondos" method="post" data-toggle="validator">
         <fieldset>
             <legend>Cargar Fondos</legend>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="card-holder-name">Balance actual</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" readonly value="${balance}">
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="card-holder-name">Monto</label>
                 <div class="col-sm-9">
@@ -34,7 +42,9 @@
                                 <div class="col-xs-3">
                                     <select class="form-control col-sm-2 " name="tarjeta" id="tarjeta">
                                         <#list tarjetas as tarjeta>
-                                            <option value="${tarjeta_index}">${tarjeta.numero}</option>
+                                            <#if cargar>
+                                                <option value="${tarjeta_index}">${tarjeta.numero}</option>
+                                            </#if>
                                         </#list>
                                     </select>
                                 </div>
@@ -47,7 +57,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="card-number">Numero de Tarjeta</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="card-number" id="card-number" placeholder="Numero de Tarjeta de Debito/Credito" data-minlength="16" data-error="Por Favor, Inserte su Numero de Tarjeta" required>
+                                <input type="text" class="form-control" name="card-number" id="card-number" placeholder="Numero de Tarjeta de Debito/Credito" data-minlength="16" data-error="Por Favor, Inserte su Numero de Tarjeta" >
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
@@ -55,7 +65,7 @@
                             <label class="col-sm-3 control-label" for="expiry-month">Fecha de Expiracion</label>
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <select class="form-control col-sm-2 " name="expiry-month" id="expiry-month" required>
+                                    <select class="form-control col-sm-2 " name="expiry-month" id="expiry-month" >
                                         <option value=""></option>
                                         <option value="01">Jan (01)</option>
                                         <option value="02">Feb (02)</option>
@@ -72,7 +82,7 @@
                                     </select>
                                 </div>
                                 <div class="col-xs-3">
-                                    <select class="form-control" name="expiry-year" required>
+                                    <select class="form-control" name="expiry-year" >
                                         <option value=""></option>
                                         <option value="17">2017</option>
                                         <option value="18">2018</option>
@@ -92,7 +102,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label" data-minlength="3" for="cvv">CVC</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" name="cvc" id="cvc" placeholder="Codigo de Seguridad" required>
+                                <input type="text" class="form-control" name="cvc" id="cvc" placeholder="Codigo de Seguridad" >
                             </div>
                         </div>
                     </div>

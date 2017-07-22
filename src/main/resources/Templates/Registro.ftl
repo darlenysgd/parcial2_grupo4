@@ -1,6 +1,6 @@
 <#include "Includes/Header.ftl">
 
-<div class="panel panelRegistro">
+<div class="panel panelRegistro" style="margin: 0 auto">
 <br>
 <div class="panel">
     <div class="panel-heading  panel-lottery">Registro de Usuarios</div>

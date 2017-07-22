@@ -1,5 +1,5 @@
 <#include "Includes/Header.ftl">
-<div style="padding-top: 82%">
+<div style="padding-top: 100px">
 <table id="myTable" class="table table-striped" >
     <thead>
     <tr>
@@ -10,12 +10,17 @@
     </tr>
     </thead>
     <tbody align="left">
+    <#list transacciones as transaccion>
+    <#if mostrar>
     <tr>
-        <td>Hola</td>
-        <td>Hola</td>
-        <td>Hola</td>
-        <td>Hola</td>
+        <td>${transaccion.usuarioOrigen.usuario}</td>
+        <td>${transaccion.usuarioDestino.usuario}</td>
+        <td>${transaccion.montoTransferido}</td>
+        <td>${transaccion.fecha}</td>
     </tr>
+
+    </#if>
+    </#list>
       </tbody>
 </table>
 </div>
