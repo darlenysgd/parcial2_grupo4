@@ -24,7 +24,7 @@
 </style>
 
 
-<form action="/Imagen" method="post" enctype="multipart/form-data">
+<form action="/publicarGanador" method="post" enctype="multipart/form-data">
 
     <div class="imageupload panel panel-default">
         <div class="panel-heading clearfix">
@@ -58,13 +58,12 @@
         <hr>
 
         <h4 class="comentario">Comentario:</h4>
-        <textarea id="comentarioTextArea"></textarea>
+        <textarea id="comentarioTextArea" name="comentario"></textarea>
 
         <div class="panel-footer">
             <button type="submit" class="button-default">Guardar</button>
         </div>
     </div>
-
 
 </form>
 

@@ -20,7 +20,7 @@ public class Cuenta implements Serializable{
     private List<Transaccion> transacciones;
     @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Tarjeta> tarjetas;
-    @OneToMany (cascade = CascadeType.ALL)
+    @OneToMany (fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<IncrementoFondos> Fondos;
 
     public Cuenta() {

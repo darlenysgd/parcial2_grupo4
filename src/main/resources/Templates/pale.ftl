@@ -3,10 +3,12 @@
 <div style="padding-top:8%" class="col-md-4 col-md-offset-4">
 
     <form class="form-horizontal" role="form" action="/Pale" method="post" data-toggle="validator">
+
+
         <div class="form-group">
             <label class="col-md-4 control-label" for="card-holder-name">Monto</label>
             <div class="col-md-8">
-                <input type="number" max="${balance}" class="form-control" name="monto" id="monto" placeholder="Monto A Apostar">
+                <input type="number" max="${balance}" min="1" class="form-control" name="monto" id="monto" placeholder="Monto A Apostar">
             </div>
         </div>
 
@@ -113,24 +115,23 @@
                 <input type="submit" class="btn btn-success" style="background: #088DA5; color: white" value="Realizar Apuesta"/>
             </div>
         </div>
-
-    </form>
-
-</div>
-
-
-<div class="col-md-4 col-md-offset-4">
-    <form method="get" action="/ganarPale">
         <div class="form-group">
-            <input type="submit" value="Ganar Ahora" class="form-control">
+            <div class="checkbox">
+            <label><input type="checkbox" name="ganar" value="0">Ganar</label>
         </div>
+        </div>
+
     </form>
+
 </div>
-<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
+
+
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
 <script type="text/javascript">
     $('#primerNumero').change(function(event) {
         $('#primeraBola').html($('#primerNumero').val());

@@ -1,13 +1,21 @@
 <#include "Includes/Header.ftl">
 
 <div style="padding-top: 8%" class="container">
-    <form class="form-horizontal" role="form" action="/transferirDinero" method="post">
+    <form class="form-horizontal" role="form" action="/transferirDinero" method="post" data-toggle="validator">
         <fieldset>
             <legend>Transferir</legend>
+
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="card-holder-name">Monto</label>
+                <label class="col-sm-3 control-label" for="card-holder-name">Monto Actual</label>
                 <div class="col-sm-9">
-                    <input type="number" max="${maxTransferencia}" class="form-control" name="monto" id="monto" placeholder="Monto A Transferir">
+                    <input value="${balance}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="card-holder-name">Monto a Transferir</label>
+                <div class="col-sm-9">
+                    <input type="number" max="${maxTransferencia}" min="1" class="form-control" name="monto" placeholder="Monto A Transferir">
                 </div>
             </div>
 
@@ -31,6 +39,10 @@
         </fieldset>
     </form>
 </div>
-
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
 
 <#include "Includes/Footer.ftl">

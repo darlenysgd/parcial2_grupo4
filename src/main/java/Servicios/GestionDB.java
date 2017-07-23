@@ -1,6 +1,7 @@
 package Servicios;
 
 
+import Entidades.Ganador;
 import Entidades.Usuario;
 
 import javax.persistence.*;
@@ -182,6 +183,27 @@ public class GestionDB<T> {
             return usuarios;
         }
     }
+
+    public List<Ganador> cargarGanadores(int pageNumber){
+        EntityManager em = getEntityManager();
+        int pageSize = 5;
+        int x = (pageNumber-1) * pageSize;
+        Query query = em.createQuery("from Ganador ");
+        query.setFirstResult(x);
+        query.setMaxResults(pageSize);
+        List <Ganador> ganadores = query.getResultList();
+
+        if (ganadores.size() == 0){
+
+            return  null;
+        }
+
+        else {
+
+            return ganadores;
+        }
+    }
+
 
 
 }

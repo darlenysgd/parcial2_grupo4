@@ -33,7 +33,7 @@
             <input type="submit" id="btnSubmit" class="form-control" value="Iniciar Sesion">
         </div>
         <div class="form-group">
-            <a href="#"><input type="Button" class="form-control" value="Registrarse"  ></a>
+            <a href="/NuevoUsuario"><input type="Button" class="form-control" value="Registrarse"  ></a>
         </div>
     </form>
 </div>

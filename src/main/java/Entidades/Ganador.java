@@ -15,15 +15,18 @@ public class Ganador implements Serializable {
     private long codigo;
     @OneToOne
     private Usuario usuario;
-    @Column(length = 1000000)
+    @Column(length = 2000000)
     private byte[] imagen;
+    private String mensaje;
+    private String rutaImagen;
 
     public Ganador() {
     }
 
-    public Ganador(Usuario usuario, byte[] imagen) {
+    public Ganador(Usuario usuario, byte[] imagen, String mensaje) {
         this.usuario = usuario;
         this.imagen = imagen;
+        this.mensaje = mensaje;
     }
 
     public long getCodigo() {
@@ -48,5 +51,21 @@ public class Ganador implements Serializable {
 
     public void setImagen(byte[] imagen) {
         this.imagen = imagen;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
     }
 }
