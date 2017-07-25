@@ -81,7 +81,7 @@ public class main {
         JuegosServices juegosServices = new JuegosServices().getInstancia();
 
 
-        exception(IllegalArgumentException.class, (exception, request, response) -> {
+      /*  exception(IllegalArgumentException.class, (exception, request, response) -> {
             manejarError(BAD_REQUEST,exception, request, response);
         });
 
@@ -91,7 +91,7 @@ public class main {
 
         exception(Exception.class, (exception, request, response) -> {
             manejarError(ERROR_INTERNO,exception, request, response);
-        });
+        }); */
 
         get("/Inicio", (request, response) -> {
 
@@ -765,20 +765,9 @@ public class main {
 
             IncrementoFondos fondos = new IncrementoFondos();
 
-            fondos.setMonto(Long.parseLong(request.queryParams("monto")));
-            Date fecha = new Date();
-            fondos.setFecha(fecha.toString());
-
             Usuario usuario = request.session().attribute("usuario");
 
-            fondos.setUsuario(usuario);
-
-            Cuenta cuenta = CuentaServices.getInstancia().findbyusername(usuario.getUsuario());
-            cuenta.setBalance(cuenta.getBalance() + fondos.getMonto());
-            cuenta.getFondos().add(fondos);
-
-            FondosServices.getInstancia().editar(fondos);
-            CuentaServices.getInstancia().editar(cuenta);
+            usuario.getCuenta().setBalance(usuario.getCuenta().getBalance() + Long.parseLong(request.queryParams("monto")));
             UsuarioServices.getInstancia().editar(usuario);
 
             int opc = Integer.parseInt(request.queryParams("entradaT"));
@@ -794,7 +783,6 @@ public class main {
                 tarjeta.setMesVencimiento(request.queryParams("expiry-month"));
                 tarjeta.setYearVencimiento(request.queryParams("expiry-year"));
 
-                cuenta.getTarjetas().add(tarjeta);
                 fondos.setTarjeta(tarjeta);
 
                 TarjetaServices.getInstancia().crear(tarjeta);
@@ -802,7 +790,7 @@ public class main {
             }
 
             FondosServices.getInstancia().editar(fondos);
-            CuentaServices.getInstancia().editar(cuenta);
+
 
 
             response.redirect("/Inicio");

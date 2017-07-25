@@ -77,6 +77,10 @@ public class LoteriaWebServices {
                 }
             }
 
+            else {
+                return "Usuario o clave incorrectos";
+            }
+
             if (ganador){
                 return "Ganaste";
             }
@@ -150,7 +154,9 @@ public class LoteriaWebServices {
 
             }
 
-
+            else {
+                return "Usuario o clave incorrectos";
+            }
 
             if (ganador) {
                 return "Ganaste";
