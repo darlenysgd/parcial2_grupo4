@@ -19,6 +19,8 @@ public class Ganador implements Serializable {
     private byte[] imagen;
     private String mensaje;
     private String rutaImagen;
+    @OneToOne
+    private Geolocalizacion geolocalizacion;
 
     public Ganador() {
     }
@@ -67,5 +69,13 @@ public class Ganador implements Serializable {
 
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
+    }
+
+    public Geolocalizacion getGeolocalizacion() {
+        return geolocalizacion;
+    }
+
+    public void setGeolocalizacion(Geolocalizacion geolocalizacion) {
+        this.geolocalizacion = geolocalizacion;
     }
 }

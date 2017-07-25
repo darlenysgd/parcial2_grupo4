@@ -13,9 +13,7 @@ import spark.ModelAndView;
 import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 import javax.servlet.MultipartConfigElement;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -71,11 +69,7 @@ public class main {
         Usuario admin = new Usuario("", "admin", "admin", "admin", "");
         admin.setAdminsitrador(true);
 
-
-
        // AcumuladoLotoServices.getInstancia().editar(acumuladoLoto);
-
-
 
 
         try {
@@ -83,8 +77,6 @@ public class main {
         } catch (NoSuchAlgorithmException nsae) {
             // Process the exception in some way or the other
         }
-
-
 
         JuegosServices juegosServices = new JuegosServices().getInstancia();
 
@@ -698,11 +690,19 @@ public class main {
             Ganador ganador = new Ganador();
             String file_name = "image";
 
-            Usuario str = request.session().attribute("usuario");
+            Geolocalizacion geo = new Geolocalizacion();
 
+
+
+            Usuario str = request.session().attribute("usuario");
             Path temp = Paths.get(imageUpload.getAbsolutePath() + file_name + ".jpeg");
 
             request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+            geo.setLatitud(getStringFromInputStream(request.raw().getPart("ld").getInputStream()));
+            geo.setLongitud(getStringFromInputStream(request.raw().getPart("lg").getInputStream()));
+
+
+            GeolocalizacionServices.getInstancia().crear(geo);
 
             try (InputStream input = request.raw().getPart("image-file").getInputStream()) {
 
@@ -713,6 +713,7 @@ public class main {
                 ganador.setImagen(byteI);
             }
 
+            ganador.setGeolocalizacion(geo);
             ganador.setUsuario(str);
             ganador.setMensaje(request.queryParams("comentario"));
             GanadorServices.getInstancia().crear(ganador);
@@ -888,5 +889,34 @@ public class main {
         response.status(codigo);
         response.body(JsonUtilidades.toJson(new ErrorRespuesta(100, exception.getMessage())));
         exception.printStackTrace();
+    }
+
+    private static String getStringFromInputStream(InputStream is) {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+
+            br = new BufferedReader(new InputStreamReader(is));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return sb.toString();
+
     }
 }

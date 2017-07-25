@@ -23,6 +23,8 @@
     <link href="/datatables/css/dataTables.bootstrap.css" rel="stylesheet">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
+    <script src="/js/Geolocalizador.js"></script>
     <!-- =======================================================
           Theme Name: Tempo
           Theme URL: https://bootstrapmade.com/tempo-free-onepage-bootstrap-theme/
@@ -30,7 +32,7 @@
           Author URL: https://bootstrapmade.com
       ======================================================= -->
 </head>
-<body>
+<body >
 <!--HEADER START-->
 <div class="main-navigation navbar-fixed-top">
     <nav class="navbar navbar-default">
