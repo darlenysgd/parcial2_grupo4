@@ -6,6 +6,7 @@ import Entidades.*;
 import Servicios.*;
 import Utilidades.JsonUtilidades;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import freemarker.template.Configuration;
 import soap.SoapArranque;
 import spark.ModelAndView;
@@ -49,6 +50,8 @@ public class main {
     static boolean firstTime = false;
     static  Usuario userAux = null;
     static int page = 1;
+    public final static int  BAD_REQUEST = 400;
+    public final static int ERROR_INTERNO = 500;
     public static void main(String[] args) throws Exception {
 
         port(4567);
@@ -86,6 +89,17 @@ public class main {
         JuegosServices juegosServices = new JuegosServices().getInstancia();
 
 
+        exception(IllegalArgumentException.class, (exception, request, response) -> {
+            manejarError(BAD_REQUEST,exception, request, response);
+        });
+
+        exception(JsonSyntaxException.class, (exception, request, response) -> {
+            manejarError(BAD_REQUEST,exception, request, response);
+        });
+
+        exception(Exception.class, (exception, request, response) -> {
+            manejarError(ERROR_INTERNO,exception, request, response);
+        });
 
         get("/Inicio", (request, response) -> {
 
@@ -361,7 +375,7 @@ public class main {
 
             if (str.getCuenta().getBalance() > montoApostado) {
 
-
+                str.getCuenta().setBalance(str.getCuenta().getBalance() - montoApostado);
                 if (request.queryParams("ganar") != null) {
                     int Primero = Integer.parseInt(request.queryParams("primerNumero"));
                     int Segundo = Integer.parseInt(request.queryParams("segundoNumero"));
@@ -868,5 +882,11 @@ public class main {
 
 
 
+    }
+
+    private static void manejarError(int codigo,Exception exception, Request request, Response response ){
+        response.status(codigo);
+        response.body(JsonUtilidades.toJson(new ErrorRespuesta(100, exception.getMessage())));
+        exception.printStackTrace();
     }
 }
