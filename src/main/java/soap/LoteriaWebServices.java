@@ -99,10 +99,6 @@ public class LoteriaWebServices {
         }
         acumuladoLoto = AcumuladoLotoServices.getInstancia().cargarAcumulado();
         Usuario str = new Usuario();
-
-
-
-
         if (UsuarioServices.getInstancia().find(usuario) != null) {
             str = UsuarioServices.getInstancia().find(usuario);
             if (str.getClave().equals(clave)) {
@@ -147,22 +143,27 @@ public class LoteriaWebServices {
                     UsuarioServices.getInstancia().editar(str);
                 }
 
-                if (ganador) {
-                    return "Ganaste";
-                } else {
-                    return "Perdiste";
+                else {
+                    return "Fondos No Suficientes";
                 }
+
+
             }
-            else {
-                return "Fondos No Suficientes";
+
+
+
+            if (ganador) {
+                return "Ganaste";
+            } else {
+                return "Perdiste";
             }
+
+
         }
 
         else {
             return "Usuario o clave incorrectos";
         }
-
-
 
 
 
