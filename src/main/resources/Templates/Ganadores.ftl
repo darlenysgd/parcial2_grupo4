@@ -1,5 +1,7 @@
 <#include "Includes/Header.ftl">
 
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+
 <div style="margin-top: 100px">
 <#list ganadores as ganador>
 

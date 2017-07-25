@@ -4,8 +4,10 @@ package Main; /**
 
 import Entidades.*;
 import Servicios.*;
+import Utilidades.JsonUtilidades;
+import com.google.gson.Gson;
 import freemarker.template.Configuration;
-import spark.ModelAndView;
+import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 import javax.servlet.MultipartConfigElement;
 import java.io.File;
@@ -24,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.*;
+
+
 import static spark.debug.DebugScreen.enableDebugScreen;
 
 public class main {
@@ -43,6 +47,9 @@ public class main {
     static boolean firstTime = false;
     static  Usuario userAux = null;
     static int page = 1;
+
+
+
     public static void main(String[] args) {
 
         port(4567);
@@ -58,22 +65,33 @@ public class main {
 
         BootStrapService.getInstancia().init();
 
-        Usuario admin = new Usuario("","admin","admin","admin","");
+        Usuario admin = new Usuario("", "admin", "admin", "admin", "");
         admin.setAdminsitrador(true);
+
+
+
+       // AcumuladoLotoServices.getInstancia().editar(acumuladoLoto);
+
+
+
 
         try {
             number = SecureRandom.getInstance("SHA1PRNG");
-        } catch(NoSuchAlgorithmException nsae) {
+        } catch (NoSuchAlgorithmException nsae) {
             // Process the exception in some way or the other
         }
 
-       // AcumuladoLotoServices.getInstancia().crear(acumuladoLoto);
+
+
+        JuegosServices juegosServices = new JuegosServices().getInstancia();
+
+
 
         get("/Inicio", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("loggeado", loggeado);
-            return new ModelAndView(attributes,"Home.ftl");
+            return new ModelAndView(attributes, "Home.ftl");
 
         }, freeMarkerEngine);
 
@@ -81,7 +99,7 @@ public class main {
 
 
             Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes,"Login.ftl");
+            return new ModelAndView(attributes, "Login.ftl");
 
         }, freeMarkerEngine);
 
@@ -89,7 +107,7 @@ public class main {
 
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("loggeado", loggeado);
-            return new ModelAndView(attributes,"Registro.ftl");
+            return new ModelAndView(attributes, "Registro.ftl");
 
         }, freeMarkerEngine);
 
@@ -98,18 +116,18 @@ public class main {
 
             entra = true;
             Usuario str = request.session().attribute("usuario");
-            if (str == null){
+            if (str == null) {
                 response.redirect("/InicioSesion");
             }
         });
 
-            get("/AgregarFondos", (request, response) -> {
+        get("/AgregarFondos", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
-            Usuario usuario= request.session().attribute("usuario");
+            Usuario usuario = request.session().attribute("usuario");
 
             boolean cargar = false;
-            if(usuario.getCuenta().getTarjetas() != null) {
+            if (usuario.getCuenta().getTarjetas() != null) {
                 cargar = true;
                 List<Tarjeta> tarjetas = UsuarioServices.getInstancia().find(usuario.getUsuario()).getCuenta().getTarjetas();
                 attributes.put("tarjetas", tarjetas);
@@ -119,15 +137,16 @@ public class main {
             attributes.put("balance", usuario.getCuenta().getBalance());
             attributes.put("cargar", cargar);
             attributes.put("loggeado", loggeado);
-            return new ModelAndView(attributes,"agregarFondos.ftl");
+            UsuarioServices.getInstancia().editar(usuario);
+            return new ModelAndView(attributes, "agregarFondos.ftl");
 
         }, freeMarkerEngine);
 
         before("/transferirFondos", (request, response) -> {
 
-           Usuario str = request.session().attribute("usuario");
-           if (str == null){
-               response.redirect("/InicioSesion");
+            Usuario str = request.session().attribute("usuario");
+            if (str == null) {
+                response.redirect("/InicioSesion");
             }
         });
 
@@ -144,14 +163,14 @@ public class main {
             attributes.put("usuarios", UsuarioServices.getInstancia().findAll());
             attributes.put("Usrorigen", str);
 
-            return new ModelAndView(attributes,"transferirFondos.ftl");
+            return new ModelAndView(attributes, "transferirFondos.ftl");
 
         }, freeMarkerEngine);
 
         before("/Transacciones", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-            if (str == null){
+            if (str == null) {
                 response.redirect("/InicioSesion");
             }
         });
@@ -162,7 +181,7 @@ public class main {
             Usuario str = request.session().attribute("usuario");
 
             boolean mostrar = false;
-            if(str.getCuenta().getTransacciones().size() > 0 ){
+            if (str.getCuenta().getTransacciones().size() > 0) {
                 mostrar = true;
             }
             Map<String, Object> attributes = new HashMap<>();
@@ -170,7 +189,7 @@ public class main {
             attributes.put("transacciones", str.getCuenta().getTransacciones());
             attributes.put("usuario", str);
             attributes.put("loggeado", loggeado);
-            return new ModelAndView(attributes,"transacciones.ftl");
+            return new ModelAndView(attributes, "transacciones.ftl");
 
         }, freeMarkerEngine);
 
@@ -178,10 +197,11 @@ public class main {
         before("/Pale", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-            if (str == null){
+
+            if (str == null) {
                 response.redirect("/InicioSesion");
             }
-            if(str.getCuenta().getBalance() <= 0){
+            if (str.getCuenta().getBalance() <= 0) {
                 response.redirect("/AgregarFondos");
             }
         });
@@ -193,14 +213,14 @@ public class main {
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("balance", str.getCuenta().getBalance());
             attributes.put("loggeado", loggeado);
-            return new ModelAndView(attributes,"pale.ftl");
+            return new ModelAndView(attributes, "pale.ftl");
 
         }, freeMarkerEngine);
 
         before("/CompartirGanador", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-            if (str == null){
+            if (str == null) {
                 response.redirect("/InicioSesion");
             }
         });
@@ -208,15 +228,16 @@ public class main {
         get("/CompartirGanador", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("loggeado", loggeado);Ganador ganador = new Ganador();
-            return new ModelAndView(attributes,"PublicarComentario.ftl");
+            attributes.put("loggeado", loggeado);
+            Ganador ganador = new Ganador();
+            return new ModelAndView(attributes, "PublicarComentario.ftl");
 
         }, freeMarkerEngine);
 
         before("/Usuarios", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-            if (str == null || str.isAdminsitrador() == false){
+            if (str == null || str.isAdminsitrador() == false) {
                 response.redirect("/InicioSesion");
             }
         });
@@ -231,7 +252,7 @@ public class main {
             attributes.put("first", firstTime);
             attributes.put("usuarios", usuarios);
             attributes.put("loggeado", loggeado);
-            return new ModelAndView(attributes,"Usuarios.ftl");
+            return new ModelAndView(attributes, "Usuarios.ftl");
 
         }, freeMarkerEngine);
 
@@ -241,7 +262,7 @@ public class main {
             Usuario usuario = new Usuario();
             usuario.setUsuario(request.queryParams("usuario"));
 
-            if(UsuarioServices.getInstancia().find(usuario.getUsuario())==null){
+            if (UsuarioServices.getInstancia().find(usuario.getUsuario()) == null) {
 
                 usuario.setCedula(request.queryParams("cedula"));
                 usuario.setNombre(request.queryParams("nombre"));
@@ -253,32 +274,30 @@ public class main {
                 CuentaServices.getInstancia().crear(cuenta);
                 usuario.setCuenta(cuenta);
                 UsuarioServices.getInstancia().crear(usuario);
-            }
-            else {
+            } else {
                 response.redirect("/Inicio");
             }
-
 
 
             Map<String, Object> attributes = new HashMap<>();
 
             attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes, "Home.ftl");
-        },freeMarkerEngine);
+        }, freeMarkerEngine);
 
         post("/LoginForm", (request, response) -> {
 
             String usuario = request.queryParams("usuario");
             String clave = request.queryParams("clave");
 
-            if(UsuarioServices.getInstancia().find(usuario)!=null ){
+            if (UsuarioServices.getInstancia().find(usuario) != null) {
                 Usuario userAux = UsuarioServices.getInstancia().find(usuario);
-                if(userAux.getClave().equals(clave)){
+                if (userAux.getClave().equals(clave)) {
                     request.session().attribute("usuario", userAux);
                     user1 = userAux;
                     loggeado = true;
                 }
-            }else if(usuario.equals("admin") && clave.equals("admin")){
+            } else if (usuario.equals("admin") && clave.equals("admin")) {
                 request.session().attribute("usuario", admin);
                 loggeado = true;
             }
@@ -287,7 +306,7 @@ public class main {
             attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes, "Home.ftl");
 
-        },freeMarkerEngine);
+        }, freeMarkerEngine);
 
         /* before("/Fondos", (request, response) -> {
 
@@ -309,7 +328,7 @@ public class main {
         before("/Transacciones", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-            if (str == null){
+            if (str == null) {
                 response.redirect("/InicioSesion");
             }
         });
@@ -317,21 +336,19 @@ public class main {
         get("/transferirFondos", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
 
-            if(UsuarioServices.getInstancia().findAll() != null) {
+            if (UsuarioServices.getInstancia().findAll() != null) {
                 List<Usuario> usuarios = UsuarioServices.getInstancia().findAll();
                 attributes.put("usuarios", usuarios);
-            }else{
+            } else {
                 List<Usuario> usuariosAux = new ArrayList<>();
                 attributes.put("usuarios", usuariosAux);
             }
             attributes.put("Usrorigen", userAux);
             attributes.put("loggeado", loggeado);
 
-            return new ModelAndView(attributes,"transferirFondos.ftl");
+            return new ModelAndView(attributes, "transferirFondos.ftl");
 
         }, freeMarkerEngine);
-
-
 
 
         post("/Pale", (request, response) -> {
@@ -339,63 +356,75 @@ public class main {
             long montoApostado = Long.parseLong(request.queryParams("monto"));
             Usuario str = request.session().attribute("usuario");
 
+            Juego juego = new Juego();
             str.getCuenta().setBalance(str.getCuenta().getBalance() - montoApostado);
 
-        if(str.getCuenta().getBalance() > montoApostado) {
+            if (str.getCuenta().getBalance() > montoApostado) {
 
 
-            if(request.queryParams("ganar") != null){
-                int Primero = Integer.parseInt(request.queryParams("primerNumero"));
-                int Segundo = Integer.parseInt(request.queryParams("segundoNumero"));
-                int Tercero = Integer.parseInt(request.queryParams("tercerNumero"));
-                str.getCuenta().setBalance(str.getCuenta().getBalance() - montoApostado);
-                paleGanadores[0] = paleJugados[0] = Primero;
-                paleGanadores[1] = paleJugados[1] = Segundo;
-                paleGanadores[2] = paleJugados[2] = Tercero;
-
-                str.getCuenta().setBalance(str.getCuenta().getBalance() + (montoApostado * 1000));
-                ganador = true;
-
-            }else {
-
-
-                int cont = 0;
-                int Primero = Integer.parseInt(request.queryParams("primerNumero"));
-                int Segundo = Integer.parseInt(request.queryParams("segundoNumero"));
-                int Tercero = Integer.parseInt(request.queryParams("tercerNumero"));
-
-
-
-                paleJugados[0] = Primero;
-                paleJugados[1] = Segundo;
-                paleJugados[2] = Tercero;
-
-                for (int i = 0; i < 3; i++) {
-                    paleGanadores[i] = number.nextInt(12);
-                }
-
-
-                for (int j = 0; j < 3; j++) {
-
-                    if (paleGanadores[j] == paleJugados[j]) {
-                        cont++;
-                    }
-                }
-
-                if (cont == 3) {
+                if (request.queryParams("ganar") != null) {
+                    int Primero = Integer.parseInt(request.queryParams("primerNumero"));
+                    int Segundo = Integer.parseInt(request.queryParams("segundoNumero"));
+                    int Tercero = Integer.parseInt(request.queryParams("tercerNumero"));
+                    str.getCuenta().setBalance(str.getCuenta().getBalance() - montoApostado);
+                    paleGanadores[0] = paleJugados[0] = Primero;
+                    paleGanadores[1] = paleJugados[1] = Segundo;
+                    paleGanadores[2] = paleJugados[2] = Tercero;
 
                     str.getCuenta().setBalance(str.getCuenta().getBalance() + (montoApostado * 1000));
                     ganador = true;
 
-                }
-            }
 
-            UsuarioServices.getInstancia().editar(str);
-            response.redirect("/resultadoPale");
-        }
-        else{
-            response.redirect("/AgregarFondos");
-        }
+                    juego.setGanador(true);
+                    juego.setMontoGanado(montoApostado*1000);
+
+
+                } else {
+
+
+                    int cont = 0;
+                    int Primero = Integer.parseInt(request.queryParams("primerNumero"));
+                    int Segundo = Integer.parseInt(request.queryParams("segundoNumero"));
+                    int Tercero = Integer.parseInt(request.queryParams("tercerNumero"));
+
+
+                    paleJugados[0] = Primero;
+                    paleJugados[1] = Segundo;
+                    paleJugados[2] = Tercero;
+
+                    for (int i = 0; i < 3; i++) {
+                        paleGanadores[i] = number.nextInt(12);
+                    }
+
+
+                    for (int j = 0; j < 3; j++) {
+
+                        if (paleGanadores[j] == paleJugados[j]) {
+                            cont++;
+                        }
+                    }
+
+                    if (cont == 3) {
+
+                        str.getCuenta().setBalance(str.getCuenta().getBalance() + (montoApostado * 1000));
+                        ganador = true;
+                        juego.setGanador(true);
+                        juego.setMontoGanado(montoApostado*1000);
+                    }
+                }
+
+
+                String fecha = new Date().toString();
+                juego.setFecha(fecha);
+                juego.setMontoApostado(montoApostado);
+                juego.setPale(true);
+                str.getJuegos().add(juego);
+
+                UsuarioServices.getInstancia().editar(str);
+                response.redirect("/resultadoPale");
+            } else {
+                response.redirect("/AgregarFondos");
+            }
 
             return null;
         });
@@ -404,7 +433,7 @@ public class main {
         before("/resultadoPale", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-            if (str == null){
+            if (str == null) {
                 response.redirect("/InicioSesion");
             }
         });
@@ -416,22 +445,22 @@ public class main {
             attributes.put("ganadores", paleGanadores);
             attributes.put("ganador", ganador);
             attributes.put("loggeado", loggeado);
-            return new ModelAndView(attributes,"resultadoPale.ftl");
+            return new ModelAndView(attributes, "resultadoPale.ftl");
 
         }, freeMarkerEngine);
 
-         before("/Loto", (request, response) -> {
+        before("/Loto", (request, response) -> {
 
-             Usuario str = request.session().attribute("usuario");
-             if (str == null){
-                 response.redirect("/InicioSesion");
-             }
+            Usuario str = request.session().attribute("usuario");
+            if (str == null) {
+                response.redirect("/InicioSesion");
+            }
 
 
-             if(str.getCuenta().getBalance() <= 0){
-                 response.redirect("/AgregarFondos");
-             }
-         });
+            if (str.getCuenta().getBalance() <= 0) {
+                response.redirect("/AgregarFondos");
+            }
+        });
 
 
         get("/Loto", (request, response) -> {
@@ -440,10 +469,9 @@ public class main {
 
             acumuladoLoto = AcumuladoLotoServices.getInstancia().cargarAcumulado();
             Usuario str = request.session().attribute("usuario");
-            if(str.getCuenta().getBalance() < 50 ){
+            if (str.getCuenta().getBalance() < 50) {
                 response.redirect("/AgregarFondos");
-            }
-            else {
+            } else {
 
                 attributes.put("acumulado", acumuladoLoto.getAcumulado());
                 attributes.put("balance", str.getCuenta().getBalance());
@@ -464,61 +492,59 @@ public class main {
             str.getCuenta().setBalance(str.getCuenta().getBalance() - 50);
 
 
-        if(request.queryParams("ganar") != null){
+            if (request.queryParams("ganar") != null) {
 
 
-            lotoGanadores [0] = lotoJugados[0] = Integer.parseInt(request.queryParams("primerNumero"));
-            lotoGanadores [1] = lotoJugados[1] = Integer.parseInt(request.queryParams("segundoNumero"));
-            lotoGanadores [2] = lotoJugados[2] = Integer.parseInt(request.queryParams("tercerNumero"));
-            lotoGanadores [3] = lotoJugados[3] = Integer.parseInt(request.queryParams("cuartoNumero"));
-            lotoGanadores [4] = lotoJugados[4] = Integer.parseInt(request.queryParams("quintoNumero"));
-
-            str.getCuenta().setBalance(str.getCuenta().getBalance() + acumuladoLoto.getAcumulado());
-
-            acumuladoLoto.setAcumulado(0);
-            AcumuladoLotoServices.getInstancia().editar(acumuladoLoto);
-            ganador = true;
-        }
-        else {
-            int cont = 0;
-            int Primero = Integer.parseInt(request.queryParams("primerNumero"));
-            int Segundo = Integer.parseInt(request.queryParams("segundoNumero"));
-            int Tercero = Integer.parseInt(request.queryParams("tercerNumero"));
-            int Cuarto = Integer.parseInt(request.queryParams("cuartoNumero"));
-            int Quinto = Integer.parseInt(request.queryParams("quintoNumero"));
-
-            lotoJugados[0] = Primero;
-            lotoJugados[1] = Segundo;
-            lotoJugados[2] = Tercero;
-            lotoJugados[3] = Cuarto;
-            lotoJugados[4] = Quinto;
-
-            for (int i = 0; i < 5; i++) {
-                lotoGanadores[i] = number.nextInt(20);
-            }
-
-
-            for (int j = 0; j < 5; j++) {
-
-                if (lotoGanadores[j] == lotoJugados[j]) {
-                    cont++;
-                }
-
-            }
-
-            if (cont == 5) {
+                lotoGanadores[0] = lotoJugados[0] = Integer.parseInt(request.queryParams("primerNumero"));
+                lotoGanadores[1] = lotoJugados[1] = Integer.parseInt(request.queryParams("segundoNumero"));
+                lotoGanadores[2] = lotoJugados[2] = Integer.parseInt(request.queryParams("tercerNumero"));
+                lotoGanadores[3] = lotoJugados[3] = Integer.parseInt(request.queryParams("cuartoNumero"));
+                lotoGanadores[4] = lotoJugados[4] = Integer.parseInt(request.queryParams("quintoNumero"));
 
                 str.getCuenta().setBalance(str.getCuenta().getBalance() + acumuladoLoto.getAcumulado());
+
                 acumuladoLoto.setAcumulado(0);
                 AcumuladoLotoServices.getInstancia().editar(acumuladoLoto);
                 ganador = true;
+            } else {
+                int cont = 0;
+                int Primero = Integer.parseInt(request.queryParams("primerNumero"));
+                int Segundo = Integer.parseInt(request.queryParams("segundoNumero"));
+                int Tercero = Integer.parseInt(request.queryParams("tercerNumero"));
+                int Cuarto = Integer.parseInt(request.queryParams("cuartoNumero"));
+                int Quinto = Integer.parseInt(request.queryParams("quintoNumero"));
 
+                lotoJugados[0] = Primero;
+                lotoJugados[1] = Segundo;
+                lotoJugados[2] = Tercero;
+                lotoJugados[3] = Cuarto;
+                lotoJugados[4] = Quinto;
+
+                for (int i = 0; i < 5; i++) {
+                    lotoGanadores[i] = number.nextInt(20);
+                }
+
+
+                for (int j = 0; j < 5; j++) {
+
+                    if (lotoGanadores[j] == lotoJugados[j]) {
+                        cont++;
+                    }
+
+                }
+
+                if (cont == 5) {
+
+                    str.getCuenta().setBalance(str.getCuenta().getBalance() + acumuladoLoto.getAcumulado());
+                    acumuladoLoto.setAcumulado(0);
+                    AcumuladoLotoServices.getInstancia().editar(acumuladoLoto);
+                    ganador = true;
+
+                } else {
+                    acumuladoLoto.setAcumulado(acumuladoLoto.getAcumulado() + 50);
+                    AcumuladoLotoServices.getInstancia().editar(acumuladoLoto);
+                }
             }
-            else {
-                acumuladoLoto.setAcumulado(acumuladoLoto.getAcumulado() + 50);
-                AcumuladoLotoServices.getInstancia().editar(acumuladoLoto);
-            }
-        }
 
             AcumuladoLotoServices.getInstancia().editar(acumuladoLoto);
             UsuarioServices.getInstancia().editar(str);
@@ -532,7 +558,7 @@ public class main {
         before("/ganarLoto", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-            if (str == null){
+            if (str == null) {
                 response.redirect("/InicioSesion");
             }
         });
@@ -543,14 +569,14 @@ public class main {
             attributes.put("jugados", lotoJugados);
             attributes.put("ganadores", lotoGanadores);
             attributes.put("ganador", true);
-            return new ModelAndView(attributes,"resultadoLoto.ftl");
+            return new ModelAndView(attributes, "resultadoLoto.ftl");
 
         }, freeMarkerEngine);
 
         before("/resultadoLoto", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-            if (str == null){
+            if (str == null) {
                 response.redirect("/InicioSesion");
             }
         });
@@ -562,14 +588,14 @@ public class main {
             attributes.put("jugados", lotoJugados);
             attributes.put("ganador", ganador);
             attributes.put("loggeado", loggeado);
-            return new ModelAndView(attributes,"resultadoLoto.ftl");
+            return new ModelAndView(attributes, "resultadoLoto.ftl");
 
         }, freeMarkerEngine);
 
         before("/EliminarUsuario/:usuario", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-            if (str == null){
+            if (str == null) {
                 response.redirect("/InicioSesion");
             }
         });
@@ -583,7 +609,7 @@ public class main {
             UsuarioServices.getInstancia().eliminar(usuario);
 
             List<Usuario> usuarios = UsuarioServices.getInstancia().findAll();
-            if(usuarios.size()>0){
+            if (usuarios.size() > 0) {
                 existe = true;
             }
             Map<String, Object> attributes = new HashMap<>();
@@ -594,13 +620,13 @@ public class main {
 
             return new ModelAndView(attributes, "TableUsuarios.ftl");
 
-        },freeMarkerEngine);
+        }, freeMarkerEngine);
 
 
         before("/CambiarPermisos/:usuario", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-            if (str == null){
+            if (str == null) {
                 response.redirect("/InicioSesion");
             }
         });
@@ -610,14 +636,13 @@ public class main {
             boolean existe = false;
 
             Usuario user = UsuarioServices.getInstancia().find(request.params("usuario"));
-           if(user.isAdminsitrador()){
-               user.setAdminsitrador(false);
-           }
-           else{
-               user.setAdminsitrador(true);
-           }
+            if (user.isAdminsitrador()) {
+                user.setAdminsitrador(false);
+            } else {
+                user.setAdminsitrador(true);
+            }
 
-           UsuarioServices.getInstancia().editar(user);
+            UsuarioServices.getInstancia().editar(user);
             List<Usuario> usuarios = UsuarioServices.getInstancia().findAll();
 
             Map<String, Object> attributes = new HashMap<>();
@@ -628,14 +653,14 @@ public class main {
 
             return new ModelAndView(attributes, "TableUsuarios.ftl");
 
-        },freeMarkerEngine);
+        }, freeMarkerEngine);
 
 
         before("/Ganadores", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-             List<Ganador> ganadores = GanadorServices.getInstancia().findAll();
-            if (ganadores == null || str == null){
+            List<Ganador> ganadores = GanadorServices.getInstancia().findAll();
+            if (ganadores == null || str == null) {
                 response.redirect("/Inicio");
             }
         });
@@ -648,7 +673,7 @@ public class main {
             attributes.put("ganadores", GanadorServices.getInstancia().findAll());
             attributes.put("loggeado", loggeado);
             return new ModelAndView(attributes, "Ganadores.ftl");
-        },freeMarkerEngine);
+        }, freeMarkerEngine);
 
 
         post("/publicarGanador", "multipart/form-data", (request, response) -> {
@@ -661,11 +686,11 @@ public class main {
 
             Usuario str = request.session().attribute("usuario");
 
-            Path temp = Paths.get(imageUpload.getAbsolutePath() + file_name+".jpeg");
+            Path temp = Paths.get(imageUpload.getAbsolutePath() + file_name + ".jpeg");
 
             request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
 
-            try(InputStream input = request.raw().getPart("image-file").getInputStream()) {
+            try (InputStream input = request.raw().getPart("image-file").getInputStream()) {
 
 
                 Files.copy(input, temp, StandardCopyOption.REPLACE_EXISTING);
@@ -682,7 +707,7 @@ public class main {
 
             List<Ganador> ganadores = GanadorServices.getInstancia().findAll();
 
-            for(int i = 0; i < ganadores.size(); i++){
+            for (int i = 0; i < ganadores.size(); i++) {
 
                 File temp2 = File.createTempFile("image", ".jpeg", imageUpload1);
 
@@ -698,27 +723,27 @@ public class main {
             attributes.put("ganadores", GanadorServices.getInstancia().findAll());
             attributes.put("loggeado", loggeado);
 
-            return new ModelAndView(attributes,"Ganadores.ftl");
+            return new ModelAndView(attributes, "Ganadores.ftl");
         }, freeMarkerEngine);
         before("/agregarFondos", (request, response) -> {
 
             Usuario str = request.session().attribute("usuario");
-            if (str == null){
+            if (str == null) {
                 response.redirect("/InicioSesion");
             }
         });
 
-        get("/HistorialIngresos",(request, response) -> {
+        get("/HistorialIngresos", (request, response) -> {
             Usuario str = request.session().attribute("usuario");
             boolean mostrar = false;
-            if(str.getCuenta().getFondos().size() > 0 ){
+            if (str.getCuenta().getFondos().size() > 0) {
                 mostrar = true;
             }
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("loggeado", loggeado);
             attributes.put("mostrar", mostrar);
             attributes.put("fondos", str.getCuenta().getFondos());
-            return new ModelAndView(attributes,"TablaIngresos.ftl");
+            return new ModelAndView(attributes, "TablaIngresos.ftl");
         }, freeMarkerEngine);
 
         post("/agregarFondos", (request, response) -> {
@@ -729,7 +754,7 @@ public class main {
             Date fecha = new Date();
             fondos.setFecha(fecha.toString());
 
-            Usuario usuario= request.session().attribute("usuario");
+            Usuario usuario = request.session().attribute("usuario");
 
             fondos.setUsuario(usuario);
 
@@ -739,6 +764,7 @@ public class main {
 
             FondosServices.getInstancia().editar(fondos);
             CuentaServices.getInstancia().editar(cuenta);
+            UsuarioServices.getInstancia().editar(usuario);
 
             int opc = Integer.parseInt(request.queryParams("entradaT"));
 
@@ -803,7 +829,7 @@ public class main {
             user1 = null;
             response.redirect("/Inicio");
             return null;
-        }, freeMarkerEngine );
+        }, freeMarkerEngine);
 
         get("/GanadoresPaginacion", (request, response) -> {
 
@@ -813,7 +839,7 @@ public class main {
 
 
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("ganadores",ganadores);
+            attributes.put("ganadores", ganadores);
             return new ModelAndView(attributes, "index.ftl");
 
         }, freeMarkerEngine);
@@ -827,9 +853,20 @@ public class main {
             Map<String, Object> attributes = new HashMap<>();
 
             attributes.put("numPag", page);
-            attributes.put("ganadores",ganadores);
+            attributes.put("ganadores", ganadores);
             return new ModelAndView(attributes, "CargaArticulos.ftl");
 
         }, freeMarkerEngine);
+
+
+                //listar todos los estudiantes.
+                get("/:usuario", (request, response) -> {
+
+                    return JuegosServices.getInstancia().juegos(request.params("usuario"));
+                }, JsonUtilidades.json());
+
+
+
+
     }
 }

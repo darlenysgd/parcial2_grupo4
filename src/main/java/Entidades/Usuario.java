@@ -2,6 +2,7 @@ package Entidades;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by darle on 6/28/2017.
@@ -19,6 +20,8 @@ public class Usuario implements Serializable {
     private String fechaNacimiento;
     @OneToOne ( cascade = CascadeType.MERGE)
     private Cuenta cuenta;
+    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Juego> juegos;
 
     public Usuario(String cedula, String nombre, String usuario, String clave, String fechaNacimiento) {
         this.cedula = cedula;
@@ -87,5 +90,13 @@ public class Usuario implements Serializable {
 
     public void setCuenta(Cuenta cuenta) {
         this.cuenta = cuenta;
+    }
+
+    public List<Juego> getJuegos() {
+        return juegos;
+    }
+
+    public void setJuegos(List<Juego> juegos) {
+        this.juegos = juegos;
     }
 }

@@ -1,4 +1,5 @@
 <#include "Includes/Header.ftl">
+<script src="/js/Geolocalizador.js"></script>
 
 <style>
     .imageupload {
@@ -61,7 +62,7 @@
         <textarea id="comentarioTextArea" name="comentario"></textarea>
 
         <div class="panel-footer">
-            <button type="submit" class="button-default">Guardar</button>
+            <button type="submit" onclick="getLocation()"class="button-default">Guardar</button>
         </div>
     </div>
 
