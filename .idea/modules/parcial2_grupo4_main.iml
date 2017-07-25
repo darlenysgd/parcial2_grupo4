@@ -30,7 +30,7 @@
     <orderEntry type="library" name="Gradle: com.sparkjava:spark-debug-tools:0.5" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:jquery-validation:1.16.0" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:bootstrap-select:1.12.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.eclipse.jetty:jetty-http-spi:9.4.4.v20170414" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.1" level="project" />
     <orderEntry type="library" name="Gradle: org.jboss.logging:jboss-logging:3.3.0.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.javassist:javassist:3.20.0-GA" level="project" />
