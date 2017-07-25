@@ -81,7 +81,7 @@ public class main {
         JuegosServices juegosServices = new JuegosServices().getInstancia();
 
 
-      /*  exception(IllegalArgumentException.class, (exception, request, response) -> {
+        exception(IllegalArgumentException.class, (exception, request, response) -> {
             manejarError(BAD_REQUEST,exception, request, response);
         });
 
@@ -91,7 +91,7 @@ public class main {
 
         exception(Exception.class, (exception, request, response) -> {
             manejarError(ERROR_INTERNO,exception, request, response);
-        }); */
+        });
 
         get("/Inicio", (request, response) -> {
 
