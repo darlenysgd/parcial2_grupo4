@@ -69,7 +69,7 @@ public class main {
         Usuario admin = new Usuario("", "admin", "admin", "admin", "");
         admin.setAdminsitrador(true);
 
-       // AcumuladoLotoServices.getInstancia().editar(acumuladoLoto);
+       //AcumuladoLotoServices.getInstancia().editar(acumuladoLoto);
 
 
         try {
@@ -365,14 +365,15 @@ public class main {
             Juego juego = new Juego();
             str.getCuenta().setBalance(str.getCuenta().getBalance() - montoApostado);
 
+
             if (str.getCuenta().getBalance() > montoApostado) {
 
-                str.getCuenta().setBalance(str.getCuenta().getBalance() - montoApostado);
+
                 if (request.queryParams("ganar") != null) {
                     int Primero = Integer.parseInt(request.queryParams("primerNumero"));
                     int Segundo = Integer.parseInt(request.queryParams("segundoNumero"));
                     int Tercero = Integer.parseInt(request.queryParams("tercerNumero"));
-                    str.getCuenta().setBalance(str.getCuenta().getBalance() - montoApostado);
+
                     paleGanadores[0] = paleJugados[0] = Primero;
                     paleGanadores[1] = paleJugados[1] = Segundo;
                     paleGanadores[2] = paleJugados[2] = Tercero;
@@ -690,19 +691,13 @@ public class main {
             Ganador ganador = new Ganador();
             String file_name = "image";
 
-            Geolocalizacion geo = new Geolocalizacion();
-
-
-
             Usuario str = request.session().attribute("usuario");
             Path temp = Paths.get(imageUpload.getAbsolutePath() + file_name + ".jpeg");
 
             request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-            geo.setLatitud(getStringFromInputStream(request.raw().getPart("ld").getInputStream()));
-            geo.setLongitud(getStringFromInputStream(request.raw().getPart("lg").getInputStream()));
+            ganador.setDireccion(getStringFromInputStream(request.raw().getPart("lugar").getInputStream()));
 
 
-            GeolocalizacionServices.getInstancia().crear(geo);
 
             try (InputStream input = request.raw().getPart("image-file").getInputStream()) {
 
@@ -713,7 +708,7 @@ public class main {
                 ganador.setImagen(byteI);
             }
 
-            ganador.setGeolocalizacion(geo);
+
             ganador.setUsuario(str);
             ganador.setMensaje(request.queryParams("comentario"));
             GanadorServices.getInstancia().crear(ganador);
@@ -861,16 +856,12 @@ public class main {
 
         }, freeMarkerEngine);
 
-
                 //listar todos los estudiantes.
                 get("/:usuario", (request, response) -> {
 
-                    return JuegosServices.getInstancia().juegos(request.params("usuario"));
+                    Usuario usr = UsuarioServices.getInstancia().find(request.params("usuario"));
+                    return usr.getJuegos();
                 }, JsonUtilidades.json());
-
-
-
-
     }
 
     private static void manejarError(int codigo,Exception exception, Request request, Response response ){

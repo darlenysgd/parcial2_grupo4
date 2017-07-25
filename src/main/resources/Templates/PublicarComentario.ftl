@@ -160,8 +160,8 @@
 
         <hr>
 
-        <input hidden  type="text" id="longitud" name="lg"/>
-        <input hidden type="text" id="latitud" name="ld"/>
+        <input hidden  type="text" id="lugar" name="lugar"/>
+
 
         <h4 class="comentario">Comentario:</h4>
         <textarea id="comentarioTextArea" name="comentario"></textarea>
@@ -212,8 +212,17 @@
 
     function showPosition(position) {
         var googlePos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        document.getElementById("latitud").value = String(position.coords.latitude);
-        document.getElementById("longitud").value = String(position.coords.longitude);
+
+
+        var latlng = String(position.coords.latitude)+","+String(position.coords.longitude);
+
+        var url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + latlng + "&sensor=false";
+        $.getJSON(url, function (data) {
+
+                    var adress = data.results[1].formatted_address;
+                    document.getElementById("lugar").value = adress;
+                }
+        )
 
         var mapOptions = {
             zoom : 12,
@@ -252,13 +261,7 @@
         });
     }
 
-    function stopWatch() {
-        if (watchId) {
-            navigator.geolocation.clearWatch(watchId);
-            watchId = null;
 
-        }
-    }
 
     function showError(error) {
         var err = document.getElementById('mapdiv');
