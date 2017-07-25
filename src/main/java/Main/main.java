@@ -5,6 +5,7 @@ package Main; /**
 import Entidades.*;
 import Servicios.*;
 import freemarker.template.Configuration;
+import soap.SoapArranque;
 import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
 import javax.servlet.MultipartConfigElement;
@@ -43,10 +44,11 @@ public class main {
     static boolean firstTime = false;
     static  Usuario userAux = null;
     static int page = 1;
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         port(4567);
 
+        SoapArranque.init();
         staticFiles.location("/");
         staticFiles.externalLocation(System.getProperty("java.io.tmpdir"));
 

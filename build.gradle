@@ -21,6 +21,7 @@ dependencies {
     compile 'com.sparkjava:spark-debug-tools:0.5'
     compile group: 'org.webjars', name: 'jquery-validation', version: '1.16.0'
     compile group: 'org.webjars', name: 'bootstrap-select', version: '1.12.2'
+    compile group: 'org.eclipse.jetty', name: 'jetty-http-spi', version: '9.4.4.v20170414'
 
 
     runtime 'org.slf4j:slf4j-simple:1.7.21'
